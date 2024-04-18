@@ -1,0 +1,65 @@
+{
+	"folders": [
+		{
+			"name": "ios",
+			"path": "../ios"
+		},
+		{
+			"name": "lib",
+			"path": "."
+		},
+		{
+			"name": "linux",
+			"path": "../linux"
+		},
+		{
+			"name": "macos",
+			"path": "../macos"
+		},
+		{
+			"name": "test",
+			"path": "../test"
+		},
+		{
+			"name": "web",
+			"path": "../web"
+		},
+		{
+			"name": "windows",
+			"path": "../windows"
+		},
+		{
+			"name": "السجل",
+			"path": "../السجل"
+		},
+		{
+			"name": ".dart_tool",
+			"path": "../.dart_tool"
+		},
+		{
+			"name": ".idea",
+			"path": "../.idea"
+		},
+		{
+			"name": ".vscode",
+			"path": "../.vscode"
+		},
+		{
+			"name": "android",
+			"path": "../android"
+		},
+		{
+			"name": "build",
+			"path": "../build"
+		},
+		{
+			"name": "data",
+			"path": "../data"
+		},
+		{
+			"name": "new fina",
+			"path": "../../../New folder (4)/new fina"
+		}
+	],
+	"settings": {}
+}
