@@ -1,5 +1,8 @@
+import 'package:fina/constants.dart';
+import 'package:fina/html-bob.dart';
 import 'package:fina/tools/button.dart';
-import 'package:fina/views/cardsdeli.dart';
+import 'package:fina/tools/excel.dart';
+
 import 'package:flutter/material.dart';
 
 class ChMonth extends StatelessWidget {
@@ -15,11 +18,11 @@ class ChMonth extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 300),
             child: custbutton(
               hint: 'شهر ${index + 1}',
-              fun: () {
-                showSearch(
-                  context: context,
-                  delegate: cardsdeli(gg: index + 1),
-                );
+              fun: () async {
+                String mon = (index + 1).toString();
+                var res = await post(mch, {'ip': mon});
+
+                createExcel(res['data'], index + 1);
               },
             ),
           );
