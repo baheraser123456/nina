@@ -12,6 +12,7 @@ import 'package:fina/views/addion.dart';
 import 'package:fina/views/blockpage.dart';
 import 'package:fina/views/cards_page.dart';
 import 'package:fina/views/cardsprinting.dart';
+import 'package:fina/views/chm.dart';
 import 'package:fina/views/day_page.dart';
 import 'package:fina/views/delpage.dart';
 import 'package:fina/views/df.dart';
@@ -117,7 +118,8 @@ class MyApp extends StatelessWidget {
           dfTotal.name: (context) => const dfTotal(),
           history.name: (context) => const history(),
           Addion.name: (context) => const Addion(),
-          Addcard.name: (context) => const Addcard()
+          Addcard.name: (context) => const Addcard(),
+          ChMonth.name: (context) => const ChMonth(),
         },
       ),
     );
