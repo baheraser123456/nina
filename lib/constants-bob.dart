@@ -1,0 +1,29 @@
+const String base = 'https://tahafina.net/hhh/auth';
+const String login = '$base/login.php';
+const String geturl = '$base/get.php';
+const String getname = '$base//getname.php';
+const String update = '$base/update.php';
+const String addurl = '$base/add.php';
+const String deleteurl = '$base/delete.php';
+const String editlasturl = '$base/editnumber.php';
+const String updatenum = '$base/updatenum.php';
+const String total = '$base/total.php';
+
+const String reset = '$base/reset.php';
+const String nodataurl = '$base/nodata.php';
+const String nodatasurl = '$base/nodatas.php';
+const String edidall = '$base/edidall.php';
+const String block = '$base/block.php';
+const String getlastout = '$base/getlastout.php';
+const String editlastout = '$base/editlastout.php';
+const String per = '$base/per.php';
+const String day = '$base/day.php';
+const String getcards = '$base/getcards.php';
+const String updatecards = '$base/updatecards.php';
+const String getnamecards = '$base//getnamecards.php';
+const String Pos = '$base/pos.php';
+const String dfs = '$base/df.php';
+const String df = '$base/dfs.php';
+const String dftotal = '$base/dftotal.php';
+
+const String his = '$base/history.php';

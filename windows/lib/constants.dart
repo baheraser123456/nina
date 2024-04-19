@@ -1,0 +1,17 @@
+const String base = 'https://tahafina.net/9/auth';
+const String login = '$base/login.php';
+const String geturl = '$base/get.php';
+const String getname = '$base//getname.php';
+const String update = '$base/update.php';
+const String addurl = '$base/add.php';
+const String deleteurl = '$base/delete.php';
+const String editlasturl = '$base/editnumber.php';
+const String updatenum = '$base/updatenum.php';
+const String total = '$base/total.php';
+const String reset = '$base/reset.php';
+const String nodataurl = '$base/nodata.php';
+const String nodatasurl = '$base/nodatas.php';
+const String edidall = '$base/edidall.php';
+const String block = '$base/block.php';
+const String getlastout = '$base/getlastout.php';
+const String editlastout = '$base/editlastout.php';

@@ -73,7 +73,6 @@ class _PrintingState extends State<posorinting> {
     final ByteData fontData =
         await rootBundle.load("lib/assests/alfont_com_arial-1.ttf");
     final ttf = pw.Font.ttf(fontData);
-    final font = pw.Font.ttf(fontData);
 
     pdf.addPage(
       pw.Page(

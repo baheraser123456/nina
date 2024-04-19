@@ -7,6 +7,8 @@ import 'package:fina/cubit9/login_cubit.dart';
 import 'package:fina/datacubit/datacubit_cubit.dart';
 import 'package:fina/observer.dart';
 import 'package:fina/views/M.dart';
+import 'package:fina/views/add_cards.dart';
+import 'package:fina/views/addion.dart';
 import 'package:fina/views/blockpage.dart';
 import 'package:fina/views/cards_page.dart';
 import 'package:fina/views/cardsprinting.dart';
@@ -113,7 +115,9 @@ class MyApp extends StatelessWidget {
           Month.name: (context) => const Month(),
           df.name: (context) => const df(),
           dfTotal.name: (context) => const dfTotal(),
-          history.name: (context) => const history()
+          history.name: (context) => const history(),
+          Addion.name: (context) => const Addion(),
+          Addcard.name: (context) => const Addcard()
         },
       ),
     );

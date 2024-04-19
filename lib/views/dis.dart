@@ -1,5 +1,5 @@
 import 'package:fina/getcubit/get_cubit.dart';
-import 'package:fina/views/cards_page.dart';
+
 import 'package:fina/views/pos.dart';
 
 import 'package:flutter/material.dart';

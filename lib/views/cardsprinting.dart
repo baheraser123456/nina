@@ -23,12 +23,14 @@ class _PrintingState extends State<cardsprinting> {
 
   var focusNode = FocusNode();
   String? B;
+  String? C;
 
   @override
   Widget build(BuildContext context) {
     List hh = ModalRoute.of(context)!.settings.arguments as List;
     A = hh[0];
     B = hh[1];
+    C = hh[2].toString();
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -40,7 +42,7 @@ class _PrintingState extends State<cardsprinting> {
                 onKey: (event) {
                   if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
                     zm.Printing.layoutPdf(
-                        onLayout: (format) => _generatePdf(format, A!, B!));
+                        onLayout: (format) => _generatePdf(format, A!, B!, C!));
                   }
                 },
                 child: const Text(''),
@@ -56,14 +58,14 @@ class _PrintingState extends State<cardsprinting> {
           ),
         ),
         body: PdfPreview(
-          build: (format) => _generatePdf(format, A!, B!),
+          build: (format) => _generatePdf(format, A!, B!, C!),
         ),
       ),
     );
   }
 
   Future<Uint8List> _generatePdf(
-      PdfPageFormat format, String A, String B) async {
+      PdfPageFormat format, String A, String B, String C) async {
     final pdf = pw.Document(version: PdfVersion.pdf_1_4, compress: true);
 
     final fonts = await fontFromAssetBundle('lib/assests/EBGaramond-Bold.ttf');
@@ -85,7 +87,7 @@ class _PrintingState extends State<cardsprinting> {
                   pw.Column(
                     children: [
                       pw.Text(
-                        "اشتراك مخبز السيد طه",
+                        "اشتراك شهر$C مخبز السيد طه",
                         style: pw.TextStyle(font: font, fontSize: 25),
                         textDirection: pw.TextDirection.rtl,
                       ),

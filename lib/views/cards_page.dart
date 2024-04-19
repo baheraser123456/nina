@@ -1,6 +1,5 @@
 import 'package:fina/datacubit/datacubit_cubit.dart';
 
-import 'package:fina/tools/button.dart';
 import 'package:fina/tools/txtfiled.dart';
 import 'package:fina/views/cardsprinting.dart';
 
@@ -85,7 +84,7 @@ class _hhhState extends State<cardspage> with SingleTickerProviderStateMixin {
                             return 'حقل مطلوب';
                           } else if (int.parse(data) == 0 ||
                               int.parse(data) >
-                                  int.parse(state.data['data'][0]['value']) -
+                                  state.data['data'][0]['value'] -
                                       int.parse(
                                           state.data['data'][0]['$mon'])) {
                             return 'قيمه خاطئة';
@@ -125,7 +124,7 @@ class _hhhState extends State<cardspage> with SingleTickerProviderStateMixin {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('لم تتم العملية بنجاح')));
         } else if (state is cardssuc) {
-          List bb = [name, value];
+          List bb = [name, value, mon];
           vv = false;
           setState(() {});
           Navigator.popAndPushNamed(context, cardsprinting.name, arguments: bb);

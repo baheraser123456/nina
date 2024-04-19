@@ -7,8 +7,6 @@ class Month extends StatelessWidget {
   static const name = 'Mounth';
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return Scaffold(
       appBar: AppBar(),
       body: ListView.builder(

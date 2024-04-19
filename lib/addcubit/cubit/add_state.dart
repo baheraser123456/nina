@@ -10,3 +10,7 @@ class Failadd extends AddState {
   String txt;
   Failadd({required this.txt});
 }
+
+class Sucaddion extends AddState {}
+
+class Failaddion extends AddState {}

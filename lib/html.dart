@@ -8,11 +8,13 @@ post(String url, body) async {
     Response response = await http.post(Uri.parse(url), body: body);
     if (response.statusCode == 200) {
       var responsebody = jsonDecode(response.body);
+
       return responsebody;
     } else {
       return 'wrong';
     }
-  } on Exception {
+  } on Exception catch (e) {
+    print(e);
     return 'wrong';
   }
 }
@@ -26,7 +28,7 @@ getnames(String url) async {
     } else {
       return response.body;
     }
-  } on Exception {
-    return 'wrong';
+  } on Exception catch (e) {
+    print(e);
   }
 }

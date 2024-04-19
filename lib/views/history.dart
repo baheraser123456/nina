@@ -8,7 +8,7 @@ class history extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String ip = ModalRoute.of(context)!.settings.arguments as String;
+    String ip = ModalRoute.of(context)!.settings.arguments.toString();
     BlocProvider.of<DatacubitCubit>(context).gethis(ip);
 
     return BlocBuilder<DatacubitCubit, DatacubitState>(

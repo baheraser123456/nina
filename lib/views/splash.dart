@@ -1,7 +1,8 @@
 import 'package:fina/tools/datadatafilter.dart';
 import 'package:fina/tools/deligate.dart';
-import 'package:fina/tools/txtfiled.dart';
+
 import 'package:fina/views/M.dart';
+import 'package:fina/views/add_cards.dart';
 import 'package:fina/views/bloc.dart';
 
 import 'package:fina/views/day.dart';
@@ -17,7 +18,7 @@ import 'package:fina/views/outing.dart';
 
 import 'package:fina/views/outingtotal.dart';
 import 'package:fina/views/per.dart';
-import 'package:fina/views/pos.dart';
+
 import 'package:fina/views/refactory.dart';
 
 import 'package:fina/views/total.dart';
@@ -212,6 +213,23 @@ class splash extends StatelessWidget {
                       hint: "اجمالي الاشتراكات",
                       fun: () {
                         Navigator.pushNamed(context, dfTotal.name);
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    custbutton(
+                      hint: "اجمالي اشتراكات التوزيع",
+                      fun: () {
+                        Navigator.pushNamed(context, dfTotal.name);
+                      },
+                    ),
+                    custbutton(
+                      hint: "اضافة للتوزيع",
+                      fun: () {
+                        Navigator.pushNamed(context, Addcard.name);
                       },
                     ),
                   ],

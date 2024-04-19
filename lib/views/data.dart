@@ -3,6 +3,7 @@ import 'package:fina/datacubit/datacubit_cubit.dart';
 
 import 'package:fina/tools/button.dart';
 import 'package:fina/tools/txtfiled.dart';
+import 'package:fina/views/addion.dart';
 import 'package:fina/views/history.dart';
 
 import 'package:fina/views/printing.dart';
@@ -219,6 +220,17 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                             Navigator.popAndPushNamed(context, history.name,
                                 arguments: state.data['data'][0]['id']);
                           },
+                        ),
+                        custbutton(
+                          hint: "اضافة عيش",
+                          fun: () {
+                            List hh = [
+                              state.data['data'][0]['id'],
+                              state.data['data'][0]['name']
+                            ];
+                            Navigator.popAndPushNamed(context, Addion.name,
+                                arguments: hh);
+                          },
                         )
                       ])),
                 )
@@ -380,6 +392,17 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                               fun: () {
                                 Navigator.popAndPushNamed(context, history.name,
                                     arguments: state.data['data'][0]['id']);
+                              },
+                            ),
+                            custbutton(
+                              hint: "اضافة عيش",
+                              fun: () {
+                                List hh = [
+                                  state.data['data'][0]['id'],
+                                  state.data['data'][0]['name']
+                                ];
+                                Navigator.popAndPushNamed(context, Addion.name,
+                                    arguments: hh);
                               },
                             )
                           ])),
@@ -1046,6 +1069,18 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                     Navigator.popAndPushNamed(
                                         context, history.name,
                                         arguments: state.data['data'][0]['id']);
+                                  },
+                                ),
+                                custbutton(
+                                  hint: "اضافة عيش",
+                                  fun: () {
+                                    List hh = [
+                                      state.data['data'][0]['id'],
+                                      state.data['data'][0]['name']
+                                    ];
+                                    Navigator.popAndPushNamed(
+                                        context, Addion.name,
+                                        arguments: hh);
                                   },
                                 )
                               ])),
@@ -1747,6 +1782,18 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 context, history.name,
                                                 arguments: state.data['data'][0]
                                                     ['id']);
+                                          },
+                                        ),
+                                        custbutton(
+                                          hint: "اضافة عيش",
+                                          fun: () {
+                                            List hh = [
+                                              state.data['data'][0]['id'],
+                                              state.data['data'][0]['name']
+                                            ];
+                                            Navigator.popAndPushNamed(
+                                                context, Addion.name,
+                                                arguments: hh);
                                           },
                                         )
                                       ],

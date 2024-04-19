@@ -38,7 +38,8 @@ class _TotalState extends State<dfTotal> {
                             padding: const EdgeInsets.only(left: 20),
                             child: _createDataTable(
                                 context: context,
-                                A: state.data['data'][index]['last'].toString(),
+                                A: state.data['data'][index]['lasts']
+                                    .toString(),
                                 day: (index + 1).toString()),
                           );
                         }),
