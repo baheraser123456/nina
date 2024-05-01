@@ -16,6 +16,8 @@ import 'package:fina/views/dfdeli.dart';
 import 'package:fina/views/dftotal.dart';
 import 'package:fina/views/dis.dart';
 import 'package:fina/views/editall.dart';
+import 'package:fina/views/frk.dart';
+import 'package:fina/views/frkdeli.dart';
 
 import 'package:fina/views/nonamedata.dart';
 import 'package:fina/views/outing.dart';
@@ -238,14 +240,23 @@ class splash extends StatelessWidget {
                     ),
                   ],
                 ),
-                Center(
-                  child: custbutton(
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  custbutton(
                     hint: 'طباعة ',
                     fun: () {
                       Navigator.pushNamed(context, ChMonth.name);
                     },
                   ),
-                )
+                  custbutton(
+                    hint: "فرق العيش",
+                    fun: () {
+                      showSearch(
+                        context: context,
+                        delegate: frkfilter(),
+                      );
+                    },
+                  ),
+                ])
               ],
             ),
           ]),

@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fina/constants.dart';
+import 'package:fina/getcubit/get_cubit.dart';
 import 'package:fina/html.dart';
-
-part 'get_state.dart';
 
 class GetCubit extends Cubit<GetState> {
   GetCubit() : super(GetInitial());

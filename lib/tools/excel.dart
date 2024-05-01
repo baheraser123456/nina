@@ -10,10 +10,12 @@ Future<void> createExcel(List data, int mon) async {
   sheet.getRangeByName('A1').setText('الاسم');
   sheet.getRangeByName('B1').setText("المكان");
   sheet.getRangeByName('C1').setText('المبلغ المستحق');
+  sheet.getRangeByName('D1').setText("رقم الهاتف");
   for (int i = 0; i < data.length; i++) {
     sheet.getRangeByName('A${i + 2}').setText(data[i]['name']);
     sheet.getRangeByName('B${i + 2}').setText(data[i]['place']);
     sheet.getRangeByName('C${i + 2}').setText(data[i]['value'].toString());
+    sheet.getRangeByName('D${i + 2}').setText(data[i]['tel']);
   }
 
   final List<int> bytes = workbook.saveAsStream();

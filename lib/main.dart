@@ -23,6 +23,8 @@ import 'package:fina/views/editdast.dart';
 import 'package:fina/views/editdeli.dart';
 import 'package:fina/views/editedit.dart';
 import 'package:fina/views/editouting.dart';
+import 'package:fina/views/frk.dart';
+import 'package:fina/views/frkprint.dart';
 import 'package:fina/views/history.dart';
 import 'package:fina/views/nonamedata.dart';
 import 'package:fina/views/nonamedprinting.dart';
@@ -120,6 +122,8 @@ class MyApp extends StatelessWidget {
           Addion.name: (context) => const Addion(),
           Addcard.name: (context) => const Addcard(),
           ChMonth.name: (context) => const ChMonth(),
+          Frk.name: (context) => const Frk(),
+          FrkPrinting.name: (context) => const FrkPrinting(),
         },
       ),
     );

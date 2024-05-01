@@ -84,7 +84,7 @@ class _hhhState extends State<cardspage> with SingleTickerProviderStateMixin {
                             return 'حقل مطلوب';
                           } else if (int.parse(data) == 0 ||
                               int.parse(data) >
-                                  state.data['data'][0]['value'] -
+                                  int.parse(state.data['data'][0]['value']) -
                                       int.parse(
                                           state.data['data'][0]['$mon'])) {
                             return 'قيمه خاطئة';

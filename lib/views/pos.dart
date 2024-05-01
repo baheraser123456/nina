@@ -68,7 +68,8 @@ class _hhhState extends State<pos> {
                             height: 50,
                           ),
                           custbutton(
-                            hint: '${state.data['data'][0]['real'] * 5}',
+                            hint:
+                                '${int.parse(state.data['data'][0]['real']) * 5}',
                             fun: () {
                               BlocProvider.of<NodataCubit>(context).pos(
                                   state.data['data'][0]['name'],

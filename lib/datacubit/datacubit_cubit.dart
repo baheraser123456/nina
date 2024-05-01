@@ -33,6 +33,18 @@ class DatacubitCubit extends Cubit<DatacubitState> {
     }
   }
 
+  getdatas(String id) async {
+    emit(Datacubitloading());
+
+    var response = await post(frkurl, {'id': id});
+    if (response == 'wrong') {
+      emit(Datacubitfail('خطأ في الشبكة'));
+    } else {
+      print(response);
+      emit(Datacubitsuc(response));
+    }
+  }
+
   void update(Datacubitsuc state, BuildContext context,
       {required int now, required double bk}) async {
     emit(Datacubitloading());
@@ -127,6 +139,20 @@ class DatacubitCubit extends Cubit<DatacubitState> {
       emit(Datacubitfail('خطأ في الشبكة'));
     } else {
       emit(Datacubitsuc(response));
+    }
+  }
+
+  updatefrk(id, number) async {
+    emit(frkload());
+    var response = await post(upfrk, {
+      'id': id,
+      'date': DateTime.now().toString(),
+      'number': number,
+    });
+    if (response == 'wrong') {
+      emit(frkfail());
+    } else {
+      emit(frksuc());
     }
   }
 }

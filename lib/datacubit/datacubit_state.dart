@@ -32,3 +32,9 @@ class cardssuc extends DatacubitState {}
 class cardsfail extends DatacubitState {}
 
 class cardsload extends DatacubitState {}
+
+class frksuc extends DatacubitState {}
+
+class frkfail extends DatacubitState {}
+
+class frkload extends DatacubitState {}

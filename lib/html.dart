@@ -14,7 +14,6 @@ post(String url, body) async {
       return 'wrong';
     }
   } on Exception catch (e) {
-    print(e);
     return 'wrong';
   }
 }

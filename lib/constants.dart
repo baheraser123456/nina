@@ -28,5 +28,7 @@ const String dfs = '$base/df.php';
 const String df = '$base/dfs.php';
 const String dftotal = '$base/dftotal.php';
 const String mch = '$base/mounth.php';
-
 const String his = '$base/history.php';
+const String frkurl = '$base/frk.php';
+const String frks = '$base/getfrk.php';
+const String upfrk = '$base/upfrk.php';
