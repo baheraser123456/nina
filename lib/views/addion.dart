@@ -1,3 +1,4 @@
+import 'package:fina/getcubit/get_cubit.dart';
 import 'package:fina/tools/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,11 +23,12 @@ class _AddionState extends State<Addion> {
   Widget build(BuildContext context) {
     List hh = ModalRoute.of(context)!.settings.arguments as List;
     String ip = hh[0].toString();
-    String names = hh[1];
+
     return BlocListener<AddCubit, AddState>(
       listener: (context, state) {
         if (state is Sucaddion) {
           Navigator.pop(context);
+          BlocProvider.of<GetCubit>(context).gets();
         } else if (state is Failaddion) {
           ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('لم تتم العملية حاول مرة اخري')));
