@@ -21,4 +21,20 @@ class DelcubitCubit extends Cubit<DelcubitState> {
       emit(Delcubitsuc(res: res));
     }
   }
+
+  delcard({ip, name, date}) async {
+    emit(Delcubitload());
+
+    var res = post(delcards, {
+      'name': name,
+      'date': date,
+      'ip': ip,
+    });
+
+    if (res == 'wrong') {
+      emit(Delcubitfail(err: 'wrog'));
+    } else {
+      emit(Delcubitsuc(res: res));
+    }
+  }
 }

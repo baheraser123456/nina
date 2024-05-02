@@ -25,4 +25,19 @@ class EditcubitCubit extends Cubit<EditcubitState> {
       emit(Editcubitsuc(res: res));
     }
   }
+
+  editcard({name, value}) async {
+    emit(Editcubitload());
+
+    var res = post(editcards, {
+      'name': name,
+      "value": value,
+    });
+
+    if (res == 'wrong') {
+      emit(Editcubitfail(err: 'wrog'));
+    } else {
+      emit(Editcubitsuc(res: res));
+    }
+  }
 }

@@ -32,3 +32,5 @@ const String his = '$base/history.php';
 const String frkurl = '$base/frk.php';
 const String frks = '$base/getfrk.php';
 const String upfrk = '$base/upfrk.php';
+const String delcards = '$base/deletecards.php';
+const String editcards = '$base/editcard.php';

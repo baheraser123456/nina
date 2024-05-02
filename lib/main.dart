@@ -14,6 +14,7 @@ import 'package:fina/views/cards_page.dart';
 import 'package:fina/views/cardsprinting.dart';
 import 'package:fina/views/chm.dart';
 import 'package:fina/views/day_page.dart';
+import 'package:fina/views/delete_card.dart';
 import 'package:fina/views/delpage.dart';
 import 'package:fina/views/df.dart';
 import 'package:fina/views/dftotal.dart';
@@ -22,6 +23,7 @@ import 'package:fina/views/editall.dart';
 import 'package:fina/views/editdast.dart';
 import 'package:fina/views/editdeli.dart';
 import 'package:fina/views/editedit.dart';
+import 'package:fina/views/editmon.dart';
 import 'package:fina/views/editouting.dart';
 import 'package:fina/views/frk.dart';
 import 'package:fina/views/frkprint.dart';
@@ -124,6 +126,8 @@ class MyApp extends StatelessWidget {
           ChMonth.name: (context) => const ChMonth(),
           Frk.name: (context) => const Frk(),
           FrkPrinting.name: (context) => const FrkPrinting(),
+          DeleteCards.name: (context) => const DeleteCards(),
+          Editmon.name: (context) => const Editmon(),
         },
       ),
     );

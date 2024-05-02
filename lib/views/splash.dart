@@ -11,11 +11,13 @@ import 'package:fina/views/chm.dart';
 
 import 'package:fina/views/day.dart';
 import 'package:fina/views/deldeli.dart';
+import 'package:fina/views/deletefilter.dart';
 import 'package:fina/views/deli.dart';
 import 'package:fina/views/dfdeli.dart';
 import 'package:fina/views/dftotal.dart';
 import 'package:fina/views/dis.dart';
 import 'package:fina/views/editall.dart';
+import 'package:fina/views/editmonfilter.dart';
 import 'package:fina/views/frk.dart';
 import 'package:fina/views/frkdeli.dart';
 
@@ -256,6 +258,18 @@ class splash extends StatelessWidget {
                       );
                     },
                   ),
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  custbutton(
+                      hint: 'حذف من التوزيع',
+                      fun: () {
+                        showSearch(context: context, delegate: DeleteFilter());
+                      }),
+                  custbutton(
+                      hint: "تعديل الاشتراك",
+                      fun: () {
+                        showSearch(context: context, delegate: mondeli());
+                      }),
                 ])
               ],
             ),
