@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+
 import 'package:fina/class.dart';
 import 'package:fina/constants.dart';
 import 'package:fina/html.dart';
@@ -28,8 +29,9 @@ class GetCubit extends Cubit<GetState> {
     }
     var respons = await getnames(frks);
     for (var i = 0; i < respons['data'].length; i++) {
-      frk.add(
-          Data(name: respons['data'][i]['name'], id: respons['data'][i]['id']));
+      frk.add(Data(
+          name: respons['data'][i]['name'],
+          id: respons['data'][i]['id'].toString()));
     }
   }
 

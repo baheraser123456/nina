@@ -100,7 +100,8 @@ class _PrintingState extends State<outingprinting> {
                   pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.center,
                       children: [
-                        pw.Text('$E رغيف',
+                        pw.Text(
+                            '${(int.parse(E) * 0.8).toStringAsFixed(0)} رغيف',
                             style: pw.TextStyle(font: font, fontSize: 15),
                             textDirection: pw.TextDirection.rtl),
                         pw.Text(

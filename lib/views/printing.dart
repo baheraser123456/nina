@@ -12,7 +12,7 @@ import 'package:printing/printing.dart';
 
 class Printing extends StatefulWidget {
   static const name = 'print';
-  const Printing({Key? key}) : super(key: key);
+  const Printing({super.key});
 
   @override
   State<Printing> createState() => _PrintingState();
@@ -57,7 +57,7 @@ class _PrintingState extends State<Printing> {
                 icon: const Icon(FontAwesomeIcons.arrowLeft),
                 onPressed: () {
                   int count = 0;
-                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                  Navigator.of(context).popUntil((_) => count++ >= 1);
                 },
               ),
               Text(A!)

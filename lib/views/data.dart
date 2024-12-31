@@ -95,7 +95,7 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                             now = int.tryParse(value);
                             if (GG.currentState!.validate()) {
                               if (now! >
-                                      int.parse(
+                                      double.parse(
                                           state.data['data'][0]['number']) ||
                                   now! % 5 != 0) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -112,34 +112,17 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text('تخطيت الحد اليومي')));
+                              } else if (state.data['data'][0]['bk'] > 0) {
+                                BlocProvider.of<DatacubitCubit>(context).update(
+                                    state, context,
+                                    now: now!, bk: now! / 5);
+                              } else if (state.data['data'][0]['bk'] == 0) {
+                                BlocProvider.of<DatacubitCubit>(context)
+                                    .update(state, context, now: now!, bk: 0);
                               } else {
-                                showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    content: const Text("تم الدفع؟"),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          BlocProvider.of<DatacubitCubit>(
-                                                  context)
-                                              .update(state, context,
-                                                  now: now!, bk: now! / 20);
-                                        },
-                                        child: const Text('لا'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          BlocProvider.of<DatacubitCubit>(
-                                                  context)
-                                              .update(state, context,
-                                                  now: now!, bk: 0);
-                                        },
-                                        child: const Text('نعم'),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('قيمة خاطئة')));
                               }
                             }
                           },
@@ -184,34 +167,17 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text('تخطيت الحد اليومي')));
+                              } else if (state.data['data'][0]['bk'] > 0) {
+                                BlocProvider.of<DatacubitCubit>(context).update(
+                                    state, context,
+                                    now: now!, bk: now! / 5);
+                              } else if (state.data['data'][0]['bk'] == 0) {
+                                BlocProvider.of<DatacubitCubit>(context)
+                                    .update(state, context, now: now!, bk: 0);
                               } else {
-                                showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    content: const Text("تم الدفع؟"),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          BlocProvider.of<DatacubitCubit>(
-                                                  context)
-                                              .update(state, context,
-                                                  now: now!, bk: now! / 20);
-                                        },
-                                        child: const Text('لا'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          BlocProvider.of<DatacubitCubit>(
-                                                  context)
-                                              .update(state, context,
-                                                  now: now!, bk: 0);
-                                        },
-                                        child: const Text('نعم'),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('قيمة خاطئة')));
                               }
                             }),
                         custbutton(
@@ -283,34 +249,18 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                         const SnackBar(
                                             content:
                                                 Text('تخطيت الحد اليومي')));
+                                  } else if (state.data['data'][0]['bk'] > 0) {
+                                    BlocProvider.of<DatacubitCubit>(context)
+                                        .update(state, context,
+                                            now: now!, bk: now! / 5);
+                                  } else if (state.data['data'][0]['bk'] == 0) {
+                                    BlocProvider.of<DatacubitCubit>(context)
+                                        .update(state, context,
+                                            now: now!, bk: 0);
                                   } else {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        content: const Text("تم الدفع؟"),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              BlocProvider.of<DatacubitCubit>(
-                                                      context)
-                                                  .update(state, context,
-                                                      now: now!, bk: now! / 20);
-                                            },
-                                            child: const Text('لا'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              BlocProvider.of<DatacubitCubit>(
-                                                      context)
-                                                  .update(state, context,
-                                                      now: now!, bk: 0);
-                                            },
-                                            child: const Text('نعم'),
-                                          ),
-                                        ],
-                                      ),
-                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text('قيمة خاطئة')));
                                   }
                                 }
                               },
@@ -357,34 +307,18 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                         const SnackBar(
                                             content:
                                                 Text('تخطيت الحد اليومي')));
+                                  } else if (state.data['data'][0]['bk'] > 0) {
+                                    BlocProvider.of<DatacubitCubit>(context)
+                                        .update(state, context,
+                                            now: now!, bk: now! / 5);
+                                  } else if (state.data['data'][0]['bk'] == 0) {
+                                    BlocProvider.of<DatacubitCubit>(context)
+                                        .update(state, context,
+                                            now: now!, bk: 0);
                                   } else {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        content: const Text("تم الدفع؟"),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              BlocProvider.of<DatacubitCubit>(
-                                                      context)
-                                                  .update(state, context,
-                                                      now: now!, bk: now! / 20);
-                                            },
-                                            child: const Text('لا'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              BlocProvider.of<DatacubitCubit>(
-                                                      context)
-                                                  .update(state, context,
-                                                      now: now!, bk: 0);
-                                            },
-                                            child: const Text('نعم'),
-                                          ),
-                                        ],
-                                      ),
-                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text('قيمة خاطئة')));
                                   }
                                 }),
                             custbutton(
@@ -462,37 +396,20 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
                                                 content: Text('قيمة خاطئة')));
+                                      } else if (state.data['data'][0]['bk'] >
+                                          0) {
+                                        BlocProvider.of<DatacubitCubit>(context)
+                                            .update(state, context,
+                                                now: now!, bk: now! / 5);
+                                      } else if (state.data['data'][0]['bk'] ==
+                                          0) {
+                                        BlocProvider.of<DatacubitCubit>(context)
+                                            .update(state, context,
+                                                now: now!, bk: 0);
                                       } else {
-                                        showDialog<String>(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            content: const Text("تم الدفع؟"),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                              DatacubitCubit>(
-                                                          context)
-                                                      .update(state, context,
-                                                          now: now!,
-                                                          bk: now! / 20);
-                                                },
-                                                child: const Text('لا'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                              DatacubitCubit>(
-                                                          context)
-                                                      .update(state, context,
-                                                          now: now!, bk: 0);
-                                                },
-                                                child: const Text('نعم'),
-                                              ),
-                                            ],
-                                          ),
-                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text('قيمة خاطئة')));
                                       }
                                     }
                                   },
@@ -523,40 +440,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         }),
                                     custbutton(
@@ -570,37 +472,24 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                                   content: Text('قيمة خاطئة')));
+                                        } else if (double.parse(
+                                                state.data['data'][0]['bk']) >
+                                            0) {
+                                          BlocProvider.of<DatacubitCubit>(
+                                                  context)
+                                              .update(state, context,
+                                                  now: now!, bk: now! / 5);
+                                        } else if (double.parse(
+                                                state.data['data'][0]['bk']) ==
+                                            0) {
+                                          BlocProvider.of<DatacubitCubit>(
+                                                  context)
+                                              .update(state, context,
+                                                  now: now!, bk: 0);
                                         } else {
-                                          showDialog<String>(
-                                            context: context,
-                                            builder: (BuildContext context) =>
-                                                AlertDialog(
-                                              content: const Text("تم الدفع؟"),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  onPressed: () {
-                                                    BlocProvider.of<
-                                                                DatacubitCubit>(
-                                                            context)
-                                                        .update(state, context,
-                                                            now: now!,
-                                                            bk: now! / 20);
-                                                  },
-                                                  child: const Text('لا'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    BlocProvider.of<
-                                                                DatacubitCubit>(
-                                                            context)
-                                                        .update(state, context,
-                                                            now: now!, bk: 0);
-                                                  },
-                                                  child: const Text('نعم'),
-                                                ),
-                                              ],
-                                            ),
-                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text('قيمة خاطئة')));
                                         }
                                       },
                                     )
@@ -621,40 +510,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         }),
                                     custbutton(
@@ -669,40 +543,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         })
                                   ],
@@ -722,40 +581,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         }),
                                     custbutton(
@@ -770,40 +614,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         })
                                   ],
@@ -823,40 +652,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         }),
                                     custbutton(
@@ -871,40 +685,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         })
                                   ],
@@ -924,40 +723,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         }),
                                     custbutton(
@@ -972,40 +756,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         })
                                   ],
@@ -1025,40 +794,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         })
                                   ],
@@ -1122,40 +876,25 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                 .showSnackBar(const SnackBar(
                                                     content:
                                                         Text('قيمة خاطئة')));
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] >
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: now! / 5);
+                                          } else if (state.data['data'][0]
+                                                  ['bk'] ==
+                                              0) {
+                                            BlocProvider.of<DatacubitCubit>(
+                                                    context)
+                                                .update(state, context,
+                                                    now: now!, bk: 0);
                                           } else {
-                                            showDialog<String>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                content:
-                                                    const Text("تم الدفع؟"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!,
-                                                              bk: now! / 20);
-                                                    },
-                                                    child: const Text('لا'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      BlocProvider.of<
-                                                                  DatacubitCubit>(
-                                                              context)
-                                                          .update(
-                                                              state, context,
-                                                              now: now!, bk: 0);
-                                                    },
-                                                    child: const Text('نعم'),
-                                                  ),
-                                                ],
-                                              ),
-                                            );
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content:
+                                                        Text('قيمة خاطئة')));
                                           }
                                         }
                                       },
@@ -1187,44 +926,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             }),
                                         custbutton(
@@ -1238,42 +960,13 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                   .showSnackBar(const SnackBar(
                                                       content:
                                                           Text('قيمة خاطئة')));
-                                            } else {
-                                              showDialog<String>(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AlertDialog(
-                                                  content:
-                                                      const Text("تم الدفع؟"),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        BlocProvider.of<
-                                                                    DatacubitCubit>(
-                                                                context)
-                                                            .update(
-                                                                state, context,
-                                                                now: now!,
-                                                                bk: now! / 20);
-                                                      },
-                                                      child: const Text('لا'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        BlocProvider.of<
-                                                                    DatacubitCubit>(
-                                                                context)
-                                                            .update(
-                                                                state, context,
-                                                                now: now!,
-                                                                bk: 0);
-                                                      },
-                                                      child: const Text('نعم'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
+                                            } else if (state.data['data'][0]
+                                                    ['bk'] >=
+                                                0) {
+                                              BlocProvider.of<DatacubitCubit>(
+                                                      context)
+                                                  .update(state, context,
+                                                      now: now!, bk: 0);
                                             }
                                           },
                                         )
@@ -1295,44 +988,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             }),
                                         custbutton(
@@ -1347,44 +1023,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             })
                                       ],
@@ -1405,44 +1064,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             }),
                                         custbutton(
@@ -1457,44 +1099,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             })
                                       ],
@@ -1515,44 +1140,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             }),
                                         custbutton(
@@ -1567,44 +1175,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             })
                                       ],
@@ -1625,44 +1216,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             }),
                                         custbutton(
@@ -1677,44 +1251,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             })
                                       ],
@@ -1735,44 +1292,27 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
                                                         const SnackBar(
                                                             content: Text(
                                                                 'قيمة خاطئة')));
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] >
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!,
+                                                        bk: now! / 5);
+                                              } else if (state.data['data'][0]
+                                                      ['bk'] ==
+                                                  0) {
+                                                BlocProvider.of<DatacubitCubit>(
+                                                        context)
+                                                    .update(state, context,
+                                                        now: now!, bk: 0);
                                               } else {
-                                                showDialog<String>(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          AlertDialog(
-                                                    content:
-                                                        const Text("تم الدفع؟"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: now! /
-                                                                      20);
-                                                        },
-                                                        child: const Text('لا'),
-                                                      ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          BlocProvider.of<
-                                                                      DatacubitCubit>(
-                                                                  context)
-                                                              .update(state,
-                                                                  context,
-                                                                  now: now!,
-                                                                  bk: 0);
-                                                        },
-                                                        child:
-                                                            const Text('نعم'),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'قيمة خاطئة')));
                                               }
                                             }),
                                         custbutton(

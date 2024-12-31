@@ -117,7 +117,7 @@ class _FrkPrintingState extends State<FrkPrinting> {
                           mainAxisAlignment: pw.MainAxisAlignment.center,
                           children: [
                             pw.Text(
-                                '${(int.parse(B) * 0.35).toStringAsFixed(2)} جنيه ',
+                                '${(int.parse(B) * 0.5).toStringAsFixed(2)} جنيه ',
                                 style: pw.TextStyle(font: font, fontSize: 10),
                                 textDirection: pw.TextDirection.rtl),
                             pw.Text('فرق العيش: ',

@@ -37,7 +37,7 @@ class NodataCubit extends Cubit<NodataState> {
     if (res == 'wrong') {
       emit(Nodatafail());
     } else {
-      List hh = [(now / 1.25).ceil(), res['data'][0]['id']];
+      List hh = [now, res['data'][0]['id']];
       emit(Nodatasuc(hh));
     }
   }

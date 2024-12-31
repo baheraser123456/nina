@@ -39,6 +39,7 @@ import 'package:fina/views/posprinting.dart';
 import 'package:fina/views/printing.dart';
 import 'package:fina/views/refactory.dart';
 import 'package:fina/views/total.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'addcubit/cubit/add_cubit.dart';
@@ -51,6 +52,7 @@ import 'views/splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Bloc.observer = Observer();
   runApp(const MyApp());
 }

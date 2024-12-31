@@ -27,32 +27,14 @@ class AddCubit extends Cubit<AddState> {
   }
 
   addcard({required name, required number, required place}) async {
-    int? value;
-    switch (number) {
-      case '1':
-        value = 25;
-      case '2':
-        value = 25;
-      case '3':
-        value = 35;
-      case '4':
-        value = 45;
-      case '5':
-        value = 55;
-      case '6':
-        value = 65;
-      case '7':
-        value = 70;
-      case '8':
-        value = 75;
-    }
+
 
     try {
       var res = await post(addcardurl, {
         'name': name,
         'numbers': number,
         'place': place,
-        'value': value.toString()
+        'value': (int.parse(number)*30).toString(),
       });
       if (res == 'wrong') {
         emit(Failadd(txt: 'حطأ في الشبكة'));
