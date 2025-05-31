@@ -7,12 +7,15 @@ import 'package:fina/cubit9/login_cubit.dart';
 import 'package:fina/datacubit/datacubit_cubit.dart';
 import 'package:fina/observer.dart';
 import 'package:fina/views/M.dart';
+import 'package:fina/views/M2024.dart';
 import 'package:fina/views/add_cards.dart';
 import 'package:fina/views/addion.dart';
 import 'package:fina/views/blockpage.dart';
 import 'package:fina/views/cards_page.dart';
 import 'package:fina/views/cardsprinting.dart';
 import 'package:fina/views/chm.dart';
+import 'package:fina/views/cm.dart';
+import 'package:fina/views/cp.dart';
 import 'package:fina/views/day_page.dart';
 import 'package:fina/views/delete_card.dart';
 import 'package:fina/views/delpage.dart';
@@ -130,6 +133,9 @@ class MyApp extends StatelessWidget {
           FrkPrinting.name: (context) => const FrkPrinting(),
           DeleteCards.name: (context) => const DeleteCards(),
           Editmon.name: (context) => const Editmon(),
+          Month2024.name: (context) => const Month2024(),
+          cardspages.name: (context) => const cardspages(),
+          ChMonth2024.name: (context) => const ChMonth2024(),
         },
       ),
     );

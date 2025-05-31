@@ -1,13 +1,14 @@
-import 'package:fina/constants.dart';
-import 'package:fina/html-bob.dart';
+
 import 'package:fina/tools/datadatafilter.dart';
 import 'package:fina/tools/deligate.dart';
-import 'package:fina/tools/excel.dart';
+
 
 import 'package:fina/views/M.dart';
+import 'package:fina/views/M2024.dart';
 import 'package:fina/views/add_cards.dart';
 import 'package:fina/views/bloc.dart';
 import 'package:fina/views/chm.dart';
+import 'package:fina/views/cm.dart';
 
 import 'package:fina/views/day.dart';
 import 'package:fina/views/deldeli.dart';
@@ -18,7 +19,7 @@ import 'package:fina/views/dftotal.dart';
 import 'package:fina/views/dis.dart';
 import 'package:fina/views/editall.dart';
 import 'package:fina/views/editmonfilter.dart';
-import 'package:fina/views/frk.dart';
+
 import 'package:fina/views/frkdeli.dart';
 
 import 'package:fina/views/nonamedata.dart';
@@ -270,7 +271,19 @@ class splash extends StatelessWidget {
                       fun: () {
                         showSearch(context: context, delegate: mondeli());
                       }),
-                ])
+                ]),
+                custbutton(
+                  hint: "اشتراكات 2024",
+                  fun: () {
+                    Navigator.pushNamed(context,Month2024.name);
+                  },
+                ),
+              custbutton(
+                    hint: 'طباعة ',
+                    fun: () {
+                      Navigator.pushNamed(context, ChMonth2024.name);
+                    },
+                  ),
               ],
             ),
           ]),

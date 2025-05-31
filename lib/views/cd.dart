@@ -1,12 +1,13 @@
-import 'package:fina/class.dart';
 import 'package:fina/getcubit/get_cubit.dart';
-import 'package:fina/views/frk.dart';
-
+import 'package:fina/views/cp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class frkfilter extends SearchDelegate {
+class cardsdelis extends SearchDelegate {
   @override
+  @override
+  cardsdelis({required this.gg});
+  int gg;
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [IconButton(onPressed: () {}, icon: const Icon(Icons.search))];
@@ -28,11 +29,8 @@ class frkfilter extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<Data?> gg = BlocProvider.of<GetCubit>(context).frk;
-    List hh = [];
-    for (var element in gg) {
-      hh.add(element!.name);
-    }
+    List hh = BlocProvider.of<GetCubit>(context).cata;
+
     var sug = query.isEmpty
         ? hh
         : query.split(" ").length == 2
@@ -67,7 +65,12 @@ class frkfilter extends SearchDelegate {
           return GestureDetector(
             child: ListTile(title: Text(sug[index])),
             onTap: () {
-              Navigator.pushNamed(context, Frk.name, arguments: sug[index]!);
+              List hh = [sug[index], gg];
+              Navigator.pushNamed(
+                context,
+                cardspages.name,
+                arguments: hh,
+              );
             },
           );
         });

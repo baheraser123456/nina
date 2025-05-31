@@ -1,7 +1,6 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:typed_data';
 
+import 'package:fina/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,12 +23,14 @@ class _PrintingState extends State<NoNamePrinting> {
   String? E;
   String? B;
   var focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     List hh = ModalRoute.of(context)!.settings.arguments as List;
 
     E = hh[0].toString();
     B = hh[1].toString();
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -41,7 +42,9 @@ class _PrintingState extends State<NoNamePrinting> {
                 onKey: (event) {
                   if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
                     zm.Printing.layoutPdf(
-                        onLayout: (format) => _generatePdf(format, E!, B!));
+                        onLayout: (format) => _generatePdf(format, E!, B!)).then((_) {
+                      Navigator.pop(context); // Exit after printing
+                    });
                   }
                 },
                 child: const Text(''),
@@ -57,14 +60,28 @@ class _PrintingState extends State<NoNamePrinting> {
           ),
         ),
         body: PdfPreview(
+          canChangeOrientation: false, // Disable changing orientation
+          canChangePageFormat: false, // Disable changing page format
+          canDebug: false,  // Hide debug button
+          allowPrinting: false, // Disable sharing and printing options
+          allowSharing: false,
           build: (format) => _generatePdf(format, E!, B!),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(FontAwesomeIcons.print),
+          onPressed: () {
+            zm.Printing.layoutPdf(
+              onLayout: (format) => _generatePdf(format, E!, B!),
+            ).then((_) {
+              Navigator.pop(context); // Exit after printing
+            });
+          },
         ),
       ),
     );
   }
 
-  Future<Uint8List> _generatePdf(
-      PdfPageFormat format, String E, String B) async {
+  Future<Uint8List> _generatePdf(PdfPageFormat format, String E, String B) async {
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
     final font =
         await fontFromAssetBundle('lib/assests/NotoSansArabic-Light.ttf');
@@ -86,7 +103,7 @@ class _PrintingState extends State<NoNamePrinting> {
                     textDirection: pw.TextDirection.rtl,
                   ),
                   pw.Text(
-                    'مخبز السيد طه',
+                    forn_name,
                     style: pw.TextStyle(font: font, fontSize: 20),
                     textDirection: pw.TextDirection.rtl,
                   ),
@@ -104,7 +121,7 @@ class _PrintingState extends State<NoNamePrinting> {
                           style: pw.TextStyle(font: font, fontSize: 20),
                           textDirection: pw.TextDirection.rtl,
                         ),
-                      ]),
+                      ]), // End Row
                 ],
               ),
               pw.Column(

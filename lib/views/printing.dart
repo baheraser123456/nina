@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:fina/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,12 +21,11 @@ class Printing extends StatefulWidget {
 
 class _PrintingState extends State<Printing> {
   String? A;
-
   String? C;
-  var focusNode = FocusNode();
   String? B;
   String? D;
   String? E;
+  var focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +36,7 @@ class _PrintingState extends State<Printing> {
     C = hh[1].toString();
     D = hh[2].toString();
     E = hh[4].toString();
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -48,7 +49,9 @@ class _PrintingState extends State<Printing> {
                   if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
                     zm.Printing.layoutPdf(
                         onLayout: (format) =>
-                            _generatePdf(format, A!, C!, B!, D!, E!));
+                            _generatePdf(format, A!, C!, B!, D!, E!)).then((_) {
+                      Navigator.pop(context); // Exit after printing
+                    });
                   }
                 },
                 child: const Text(''),
@@ -65,7 +68,22 @@ class _PrintingState extends State<Printing> {
           ),
         ),
         body: PdfPreview(
+          canChangeOrientation: false, // Disable changing orientation
+          canChangePageFormat: false, // Disable changing page format
+          canDebug: false, // Hide debug button
+          allowPrinting: false, // Disable sharing and printing options
+          allowSharing: false,
           build: (format) => _generatePdf(format, A!, C!, B!, D!, E!),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(FontAwesomeIcons.print),
+          onPressed: () {
+            zm.Printing.layoutPdf(
+              onLayout: (format) => _generatePdf(format, A!, C!, B!, D!, E!),
+            ).then((_) {
+              Navigator.pop(context); // Exit after printing
+            });
+          },
         ),
       ),
     );
@@ -86,73 +104,74 @@ class _PrintingState extends State<Printing> {
         pageFormat: format,
         build: (context) {
           return pw.Padding(
-              padding: const pw.EdgeInsets.only(left: 20),
-              child: pw.Column(
-                mainAxisAlignment: pw.MainAxisAlignment.start,
-                crossAxisAlignment: pw.CrossAxisAlignment.stretch,
-                children: [
-                  pw.Column(
-                    children: [
-                      pw.Text(
-                        E,
-                        style: pw.TextStyle(font: font, fontSize: 25),
-                        textDirection: pw.TextDirection.rtl,
-                      ),
-                      pw.Text(
-                        'مخبز السيد طه',
-                        style: pw.TextStyle(font: font, fontSize: 25),
-                        textDirection: pw.TextDirection.rtl,
-                      ),
-                      pw.Row(
-                          mainAxisAlignment: pw.MainAxisAlignment.center,
-                          children: [
-                            pw.Text(A,
-                                style: pw.TextStyle(font: ttf, fontSize: 15),
-                                textDirection: pw.TextDirection.rtl),
-                            pw.Text(
-                              'الاسم:',
-                              style: pw.TextStyle(font: font, fontSize: 15),
-                              textDirection: pw.TextDirection.rtl,
-                            ),
-                          ]),
-                      pw.Row(
-                          mainAxisAlignment: pw.MainAxisAlignment.center,
-                          children: [
-                            pw.Text('$B رغيف',
-                                style: pw.TextStyle(font: font, fontSize: 20),
-                                textDirection: pw.TextDirection.rtl),
-                            pw.Text(
-                              'العدد:',
-                              style: pw.TextStyle(font: font, fontSize: 15),
-                              textDirection: pw.TextDirection.rtl,
-                            ),
-                          ]),
-                      pw.Row(
-                          mainAxisAlignment: pw.MainAxisAlignment.center,
-                          children: [
-                            pw.Text('$D رغيف',
-                                style: pw.TextStyle(font: font, fontSize: 10),
-                                textDirection: pw.TextDirection.rtl),
-                            pw.Text(' المتبقي: ',
-                                style: pw.TextStyle(font: font, fontSize: 15),
-                                textDirection: pw.TextDirection.rtl),
-                          ])
-                    ],
-                  ),
-                  pw.Column(
-                    mainAxisAlignment: pw.MainAxisAlignment.start,
-                    children: [
-                      pw.Text(DateFormat.yMd().add_jm().format(DateTime.now()),
-                          style: pw.TextStyle(
-                            font: fonts,
-                            fontSize: 10,
+            padding: const pw.EdgeInsets.only(left: 20),
+            child: pw.Column(
+              mainAxisAlignment: pw.MainAxisAlignment.start,
+              crossAxisAlignment: pw.CrossAxisAlignment.stretch,
+              children: [
+                pw.Column(
+                  children: [
+                    pw.Text(
+                      E,
+                      style: pw.TextStyle(font: font, fontSize: 25),
+                      textDirection: pw.TextDirection.rtl,
+                    ),
+                    pw.Text(
+                      forn_name,
+                      style: pw.TextStyle(font: font, fontSize: 25),
+                      textDirection: pw.TextDirection.rtl,
+                    ),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(A,
+                              style: pw.TextStyle(font: ttf, fontSize: 15),
+                              textDirection: pw.TextDirection.rtl),
+                          pw.Text(
+                            'الاسم:',
+                            style: pw.TextStyle(font: font, fontSize: 15),
+                            textDirection: pw.TextDirection.rtl,
                           ),
-                          textDirection: pw.TextDirection.rtl),
-                      pw.SizedBox(height: 10),
-                    ],
-                  )
-                ],
-              ));
+                        ]),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('$B رغيف',
+                              style: pw.TextStyle(font: font, fontSize: 20),
+                              textDirection: pw.TextDirection.rtl),
+                          pw.Text(
+                            'العدد:',
+                            style: pw.TextStyle(font: font, fontSize: 15),
+                            textDirection: pw.TextDirection.rtl,
+                          ),
+                        ]),
+                    pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text('$D رغيف',
+                              style: pw.TextStyle(font: font, fontSize: 10),
+                              textDirection: pw.TextDirection.rtl),
+                          pw.Text(' المتبقي: ',
+                              style: pw.TextStyle(font: font, fontSize: 15),
+                              textDirection: pw.TextDirection.rtl),
+                        ])
+                  ],
+                ),
+                pw.Column(
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  children: [
+                    pw.Text(DateFormat.yMd().add_jm().format(DateTime.now()),
+                        style: pw.TextStyle(
+                          font: fonts,
+                          fontSize: 10,
+                        ),
+                        textDirection: pw.TextDirection.rtl),
+                    pw.SizedBox(height: 10),
+                  ],
+                )
+              ],
+            ),
+          );
         },
       ),
     );

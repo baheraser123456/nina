@@ -7,7 +7,8 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
   logins(email, pass) async {
-    emit(Loginloading());
+    try {
+      emit(Loginloading());
     var respone = await post(login, {'email': email, 'pass': pass});
 
     if (respone['stutas'] == 'success') {
@@ -15,5 +16,11 @@ class LoginCubit extends Cubit<LoginState> {
     } else if (respone["stutas"] == "fail" || respone == 'wrong') {
       emit(Loginfail());
     }
+      
+    } catch (e) {
+      emit(Loginfail());
+      
+    }
+    }
   }
-}
+

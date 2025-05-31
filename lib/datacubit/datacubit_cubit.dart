@@ -34,7 +34,16 @@ class DatacubitCubit extends Cubit<DatacubitState> {
       emit(Datacubitsuc(response));
     }
   }
+  getcards(String name) async {
+    emit(Datacubitloading());
 
+    var response = await post(getnamecardss, {'name': name});
+    if (response == 'wrong') {
+      emit(Datacubitfail('خطأ في الشبكة'));
+    } else {
+      emit(Datacubitsuc(response));
+    }
+  }
   getdatas(String id) async {
     emit(Datacubitloading());
 
@@ -100,6 +109,23 @@ class DatacubitCubit extends Cubit<DatacubitState> {
   void updatecard(String name, String ip, mon, now) async {
     emit(cardsload());
     var res = await post(updatecards, {
+      'ip': ip,
+      'date': DateTime.now().toString(),
+      'name': name,
+      'mon': mon.toString(),
+      'now': now.toString(),
+      'total': DateTime.now().day.toString()
+    });
+
+    if (res == 'wrong') {
+      emit(cardsfail());
+    } else {
+      emit(cardssuc());
+    }
+  }
+  void updatecardz(String name, String ip, mon, now) async {
+    emit(cardsload());
+    var res = await post(updatecardss, {
       'ip': ip,
       'date': DateTime.now().toString(),
       'name': name,

@@ -13,7 +13,7 @@ post(String url, body) async {
     } else {
       return 'wrong';
     }
-  } on Exception catch (e) {
+  } on Exception {
     return 'wrong';
   }
 }

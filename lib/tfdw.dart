@@ -98,20 +98,5 @@ class _TotalState extends State<dftwTotal> {
         ));
   }
 
-  List<DataColumn> _createColumnss() {
-    return [
-      const DataColumn(label: Text('')),
-      const DataColumn(label: Text('')),
-    ];
-  }
 
-  List<DataRow> _createRowss(
-      {required BuildContext context, required A, required day}) {
-    return [
-      DataRow(cells: [
-        DataCell(Text(A.toString())),
-        DataCell(Text(day)),
-      ]),
-    ];
-  }
 }

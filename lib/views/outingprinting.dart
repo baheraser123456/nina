@@ -21,15 +21,17 @@ class outingprinting extends StatefulWidget {
 }
 
 class _PrintingState extends State<outingprinting> {
-  String? E;
+  String? e;
   var focusNode = FocusNode();
-  String? B;
+  String? b;
+
   @override
   Widget build(BuildContext context) {
     List hh = ModalRoute.of(context)!.settings.arguments as List;
 
-    E = (hh[0].toInt()).toString();
-    B = hh[1].toString();
+    e = (hh[0].toInt()).toString();
+    b = hh[1].toString();
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -41,7 +43,10 @@ class _PrintingState extends State<outingprinting> {
                 onKey: (event) {
                   if (event.isKeyPressed(LogicalKeyboardKey.enter)) {
                     zm.Printing.layoutPdf(
-                        onLayout: (format) => _generatePdf(format, E!, B!));
+                      onLayout: (format) => _generatePdf(format, e!, b!),
+                    ).then((_) {
+                      Navigator.pop(context); // الخروج بعد الطباعة
+                    });
                   }
                 },
                 child: const Text(''),
@@ -57,17 +62,31 @@ class _PrintingState extends State<outingprinting> {
           ),
         ),
         body: PdfPreview(
-          build: (format) => _generatePdf(format, E!, B!),
+         // يمنع تغيير الصفحة
+          canChangeOrientation: false, // يمنع تغيير الاتجاه
+          canChangePageFormat: false,  // يخفي خيار اختيار حجم الورق
+          canDebug: false,  // يخفي زر التصحيح
+          allowPrinting: false,
+          allowSharing: false,
+          build: (format) => _generatePdf(format, e!, b!),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(FontAwesomeIcons.print),
+          onPressed: () {
+            zm.Printing.layoutPdf(
+              onLayout: (format) => _generatePdf(format, e!, b!),
+            ).then((_) {
+              Navigator.pop(context); // الخروج بعد الطباعة مباشرةً
+            });
+          },
         ),
       ),
     );
   }
 
-  Future<Uint8List> _generatePdf(
-      PdfPageFormat format, String E, String B) async {
+  Future<Uint8List> _generatePdf(PdfPageFormat format, String e, String b) async {
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font =
-        await fontFromAssetBundle('lib/assests/NotoSansArabic-Light.ttf');
+    final font = await fontFromAssetBundle('lib/assests/NotoSansArabic-Light.ttf');
     final fonts = await fontFromAssetBundle('lib/assests/EBGaramond-Bold.ttf');
 
     pdf.addPage(
@@ -82,45 +101,51 @@ class _PrintingState extends State<outingprinting> {
               pw.Column(
                 children: [
                   pw.Text(
-                    B,
+                    b,
                     style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        font: font,
-                        fontSize: 25),
+                      fontWeight: pw.FontWeight.bold,
+                      font: font,
+                      fontSize: 25,
+                    ),
                     textDirection: pw.TextDirection.rtl,
                   ),
                   pw.Text(
                     'خبـــز',
                     style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold,
-                        font: font,
-                        fontSize: 25),
+                      fontWeight: pw.FontWeight.bold,
+                      font: font,
+                      fontSize: 25,
+                    ),
                     textDirection: pw.TextDirection.rtl,
                   ),
                   pw.Row(
-                      mainAxisAlignment: pw.MainAxisAlignment.center,
-                      children: [
-                        pw.Text(
-                            '${(int.parse(E) * 0.8).toStringAsFixed(0)} رغيف',
-                            style: pw.TextStyle(font: font, fontSize: 15),
-                            textDirection: pw.TextDirection.rtl),
-                        pw.Text(
-                          'العدد:',
-                          style: pw.TextStyle(font: font, fontSize: 15),
-                          textDirection: pw.TextDirection.rtl,
-                        ),
-                      ]),
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                    children: [
+                      pw.Text(
+                        '$e رغيف',
+                        style: pw.TextStyle(font: font, fontSize: 15),
+                        textDirection: pw.TextDirection.rtl,
+                      ),
+                      pw.Text(
+                        'العدد:',
+                        style: pw.TextStyle(font: font, fontSize: 15),
+                        textDirection: pw.TextDirection.rtl,
+                      ),
+                    ],
+                  ),
                 ],
               ),
               pw.Column(
                 mainAxisAlignment: pw.MainAxisAlignment.start,
                 children: [
-                  pw.Text(DateFormat.yMd().add_jm().format(DateTime.now()),
-                      style: pw.TextStyle(
-                        font: fonts,
-                        fontSize: 10,
-                      ),
-                      textDirection: pw.TextDirection.rtl),
+                  pw.Text(
+                    DateFormat.yMd().add_jm().format(DateTime.now()),
+                    style: pw.TextStyle(
+                      font: fonts,
+                      fontSize: 10,
+                    ),
+                    textDirection: pw.TextDirection.rtl,
+                  ),
                   pw.SizedBox(height: 10),
                 ],
               )
