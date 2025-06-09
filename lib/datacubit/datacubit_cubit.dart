@@ -57,7 +57,7 @@ class DatacubitCubit extends Cubit<DatacubitState> {
   }
 
   void update(Datacubitsuc state, BuildContext context,
-      {required int now, required double bk}) async {
+      {required int now, required double bk, String? password}) async {
     emit(Datacubitloading());
     if (now < int.parse(state.data['data'][0]['number']) ||
         now == int.parse(state.data['data'][0]['number'])) {
@@ -73,7 +73,7 @@ class DatacubitCubit extends Cubit<DatacubitState> {
       var formatters = DateFormat.Hm('ar_SA');
 
       String formatteds = formatters.format(nowss);
-      var res = await post(updatenum, {
+      var req = {
         'ip': state.data['data'][0]['id'].toString(),
         'name': state.data['data'][0]['name'],
         'number': zz.toString(),
@@ -83,7 +83,11 @@ class DatacubitCubit extends Cubit<DatacubitState> {
         'totals': now.toString(),
         'pro': now.toString(),
         'bk': bk.toString()
-      });
+      };
+      if (password != null) {
+        req['password'] = password;
+      }
+      var res = await post(updatenum, req);
       if (res == 'wrong') {
         emit(Datacubitfail('خطأ في الشبكة'));
       } else {
@@ -181,6 +185,19 @@ class DatacubitCubit extends Cubit<DatacubitState> {
       emit(frkfail());
     } else {
       emit(frksuc());
+    }
+  }
+
+  Future<void> updatePassword({required String id, required String password}) async {
+    emit(Datacubitloading());
+    var res = await post(update_password, {
+      'id': id,
+      'password': password,
+    });
+    if (res == 'wrong') {
+      emit(Datacubitfail('خطأ في الشبكة'));
+    } else {
+      emit(Datacubitsuc(res));
     }
   }
 }

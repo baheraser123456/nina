@@ -1,4 +1,4 @@
-const String base = 'http://http://localhost/auth';
+const String base = 'http://localhost/auth';
 const String login = '$base/login.php';
 const String geturl = '$base/get.php';
 const String getname = '$base/getname.php';
@@ -37,3 +37,4 @@ const String upfrk = '$base/upfrk.php';
 const String delcards = '$base/deletecards.php';
 const String editcards = '$base/editcard.php';
 const String forn_name = "مخبز الجبالي";
+const String update_password = '$base/update_password.php';
