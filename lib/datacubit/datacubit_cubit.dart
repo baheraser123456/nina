@@ -200,4 +200,18 @@ class DatacubitCubit extends Cubit<DatacubitState> {
       emit(Datacubitsuc(res));
     }
   }
+
+  Future<void> deleteOperation({required String id, required String last, required String password}) async {
+    emit(Datacubitloading());
+    var res = await post('delete_operation', {
+      'id': id,
+      'last': last,
+      'password': password,
+    });
+    if (res == 'wrong') {
+      emit(Datacubitfail('خطأ في الشبكة'));
+    } else {
+      emit(Datacubitsuc(res));
+    }
+  }
 }

@@ -1,18 +1,18 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+
+import 'dart:convert';
+
 import 'package:fina/cubit/cubit/vheck_cubit.dart';
 import 'package:fina/datacubit/datacubit_cubit.dart';
-
 import 'package:fina/tools/button.dart';
 import 'package:fina/tools/txtfiled.dart';
 import 'package:fina/views/addion.dart';
+import 'package:fina/views/edit.dart';
 import 'package:fina/views/history.dart';
-
 import 'package:fina/views/printing.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class hhh extends StatefulWidget {
   const hhh({super.key});
@@ -27,107 +27,111 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
   late Animation animation;
   int? now;
   String? password;
-  bool isEditingPassword = false;
-  TextEditingController passwordController = TextEditingController();
+  bool _isAuthenticated = false;
+  bool _hasCheckedAuth = false;
 
   @override
   void initState() {
     super.initState();
-    controller = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    );
-    animation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero)
-        .animate(controller);
+    controller = AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    animation = Tween<Offset>(begin: const Offset(0, 1), end: Offset.zero).animate(controller);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_hasCheckedAuth) {
+      _hasCheckedAuth = true;
+      final name = ModalRoute.of(context)!.settings.arguments as String;
+      BlocProvider.of<DatacubitCubit>(context).getdata(name);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) _checkAuthentication();
+      });
+    }
+  }
+
+  Future<void> _checkAuthentication() async {
+    final state = BlocProvider.of<DatacubitCubit>(context).state;
+    if (state is! Datacubitsuc) return;
+
+    final data = state.data['data'][0];
+    final pass = data['pass'].toString();
+
+    if (data['per'] == 'باذن') {
+      if (pass == '0000') {
+        _showSnackBar('يجب تغيير كلمة المرور الافتراضية أولاً');
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+        return;
+      }
+
+      final enteredPassword = await _showPasswordDialog();
+      if (!mounted || enteredPassword == null) {
+        Navigator.of(context).pop();
+        return;
+      }
+
+      if (enteredPassword == pass) {
+        setState(() {
+          _isAuthenticated = true;
+          password = enteredPassword;
+        });
+      } else {
+        _showSnackBar('كلمة المرور غير صحيحة');
+        Navigator.of(context).pop();
+      }
+    } else {
+      setState(() => _isAuthenticated = true);
+    }
+  }
+
+  void _redirectToEdit(id) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _showSnackBar('يجب تغيير كلمة المرور الافتراضية أولاً');
+        Navigator.of(context).popAndPushNamed(Edit.name, arguments: id);
+      }
+    });
   }
 
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-    // Clear password field after any pop-up
-    passwordController.clear();
   }
 
-  Widget _buildPasswordField(Map data, String id) {
-    // Always start with empty password field
-    if (!isEditingPassword) {
-      passwordController.text = '';
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        custfiled(
-          hint: 'كلمة المرور',
-          jj: passwordController,
-          zz: false,
-          hh: [FilteringTextInputFormatter.digitsOnly],
-          len: 4,
-          val: (val) {
-            if (val == null || val.isEmpty) return 'حقل مطلوب';
-            if (!isEditingPassword && val != (cubit.password ?? id)) return 'كلمة المرور غير صحيحة';
-            if (isEditingPassword && (!RegExp(r'^\d{4}$').hasMatch(val))) return 'يجب أن تكون كلمة المرور 4 أرقام';
-            return null;
-          },
-          onfiledsubmited: (_) {},
+  Future<String?> _showPasswordDialog() async {
+    String passwordInput = '';
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('أدخل كلمة المرور'),
+        content: TextField(
+          autofocus: true,
+          obscureText: true,
+          keyboardType: TextInputType.number,
+          maxLength: 4,
+          decoration: const InputDecoration(hintText: 'كلمة المرور'),
+          onChanged: (val) => passwordInput = val,
         ),
-        Row(
-          children: [
-            if (!isEditingPassword)
-              custbutton(
-                hint: 'تعديل كلمة المرور',
-                fun: () {
-                  setState(() {
-                    isEditingPassword = true;
-                  });
-                },
-              ),
-            if (isEditingPassword)
-              custbutton(
-                hint: 'حفظ كلمة المرور',
-                fun: () async {
-                  final newPass = passwordController.text;
-                  if (newPass.isEmpty) {
-                    _showSnackBar('كلمة المرور مطلوبة');
-                    return;
-                  }
-                  if (!RegExp(r'^\d{4}$').hasMatch(newPass)) {
-                    _showSnackBar('يجب أن تكون كلمة المرور 4 أرقام');
-                    return;
-                  }
-                  try {
-                    final response = await http.post(
-                      Uri.parse('https://yourserver/update_password.php'),
-                      body: {
-                        'id': id,
-                        'old_password': password,
-                        'password': newPass,
-                      },
-                    );
-
-                    final result = jsonDecode(response.body);
-                    if (result['status'] == 'wrong_old_password') {
-                      _showSnackBar('كلمة المرور القديمة غير صحيحة');
-                    } else if (result['status'] == 'duplicate') {
-                      _showSnackBar('كلمة المرور مستخدمة من قبل');
-                    } else if (result['status'] == 'success') {
-                      setState(() {
-                        isEditingPassword = false;
-                      });
-                      _showSnackBar('تم تحديث كلمة المرور');
-                    } else {
-                      _showSnackBar('حدث خطأ أثناء تحديث كلمة المرور');
-                    }
-                  } catch (e) {
-                    _showSnackBar('حدث خطأ أثناء تحديث كلمة المرور');
-                  }
-                },
-              ),
-          ],
-        ),
-      ],
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('إلغاء')),
+          TextButton(
+            onPressed: () {
+              if (passwordInput.isEmpty) {
+                _showSnackBar('كلمة المرور مطلوبة');
+                return;
+              }
+              Navigator.of(context).pop(passwordInput);
+            },
+            child: const Text('تأكيد'),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildCustButtonRow(List<int> values, Map data, DatacubitState state, bool withPassword) {
+  Widget _buildButtonRow(List<int> values, Map data) {
     return Column(
       children: [
         for (int i = 0; i < values.length; i += 2)
@@ -137,37 +141,7 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
               for (int j = 0; j < 2 && i + j < values.length; j++)
                 custbutton(
                   hint: values[i + j].toString(),
-                  fun: () {
-                    setState(() {
-                      now = values[i + j];
-                    });
-                    int? dataNumber = data['number'] is int ? data['number'] : int.tryParse(data['number'].toString());
-                    int? dataBk = data['bk'] is int ? data['bk'] : int.tryParse(data['bk'].toString());
-                    // If password is required, check it first
-                    if (data['per'] == 'باذن') {
-                      if (passwordController.text.isEmpty) {
-                        _showSnackBar('يرجى إدخال كلمة المرور');
-                        return;
-                      }
-                      if (passwordController.text != (cubit.password ?? data['id'].toString())) {
-                        _showSnackBar('كلمة المرور غير صحيحة');
-                        return;
-                      }
-                    }
-                    if (now == null) {
-                      _showSnackBar('يرجى إدخال عدد صحيح');
-                    } else if (dataNumber != null && now! > dataNumber) {
-                      _showSnackBar('قيمة خاطئة: العدد أكبر من المتاح');
-                    } else if (now! % 5 != 0) {
-                      _showSnackBar('عدد الأرغفة يجب أن يكون من مضاعفات 5');
-                    } else if (dataBk != null && dataBk > 0) {
-                      BlocProvider.of<DatacubitCubit>(context).update(state as Datacubitsuc, context, now: now!, bk: now! / 5.0, password: data['per'] == 'باذن' ? passwordController.text : null);
-                    } else if (dataBk != null && dataBk == 0) {
-                      BlocProvider.of<DatacubitCubit>(context).update(state as Datacubitsuc, context, now: now!, bk: 0.0, password: data['per'] == 'باذن' ? passwordController.text : null);
-                    } else {
-                      _showSnackBar('قيمة خاطئة');
-                    }
-                  },
+                  fun: () => _onSubmit(nowValue: values[i + j], data: data),
                 ),
             ],
           ),
@@ -175,94 +149,52 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
     );
   }
 
+  Future<void> _onSubmit({required int nowValue, required Map data}) async {
+    setState(() => now = nowValue);
+    final cubit = BlocProvider.of<DatacubitCubit>(context);
+    final state = cubit.state;
+
+    if (state is! Datacubitsuc) return;
+
+    final dataNumber = int.tryParse(data['number'].toString());
+    if (now == null || dataNumber == null) return;
+
+    if (now! > dataNumber) {
+      _showSnackBar('قيمة خاطئة: العدد أكبر من المتاح');
+    } else if (now! % 5 != 0) {
+      _showSnackBar('عدد الأرغفة يجب أن يكون من مضاعفات 5');
+    } else {
+      cubit.update(state, context, now: now!, bk: now! / 5.0);
+    }
+  }
+
   Widget _buildFormSection({
-    required GlobalKey<FormState> GG,
+    required GlobalKey<FormState> formKey,
     required Map data,
     required DatacubitState state,
     required bool withDayLimit,
   }) {
-    final isBazn = data['per'] == 'باذن';
     return Form(
-      key: GG,
+      key: formKey,
       child: Scaffold(
         appBar: AppBar(title: const Text('البيانات')),
         body: ListView(
           children: [
-            _createDataTable(
-              context: context,
-              A: data['id'],
-              B: data['name'],
-              C: data['number'],
-              E: data['numbers'],
-              F: data['last'],
-              G: data['date'],
-              H: data['per'],
-              I: data['bk'],
-            ),
-            if (isBazn) _buildPasswordField(data, data['id'].toString()),
+            _createDataTable(data),
             const SizedBox(height: 70),
             custfiled(
               hint: 'عدد الارغفة',
               hh: [FilteringTextInputFormatter.digitsOnly],
-              onfiledsubmited: (value) {
-                setState(() {
-                  now = int.tryParse(value);
-                });
-                // Safe parsing for all relevant fields
-                int? dataNumber = data['number'] is int ? data['number'] : int.tryParse(data['number'].toString());
-                int? dataStd = data['std'] is int ? data['std'] : int.tryParse(data['std'].toString());
-                int? dataNumbers = data['numbers'] is int ? data['numbers'] : int.tryParse(data['numbers'].toString());
-                int? dataBk = data['bk'] is int ? data['bk'] : int.tryParse(data['bk'].toString());
-                // If password is required, check it first
-                if (isBazn) {
-                  if (passwordController.text.isEmpty) {
-                    _showSnackBar('يرجى إدخال كلمة المرور');
-                    return;
-                  }
-                  if (passwordController.text != (cubit.password ?? data['id'].toString())) {
-                    _showSnackBar('كلمة المرور غير صحيحة');
-                    return;
-                  }
-                }
-                if (GG.currentState!.validate()) {
-                  if (now == null) {
-                    _showSnackBar('يرجى إدخال عدد صحيح');
-                  } else if (now! <= 0) {
-                    _showSnackBar('عدد الأرغفة يجب أن يكون أكبر من الصفر');
-                  } else if (dataNumber != null && now! > dataNumber) {
-                    _showSnackBar('قيمة خاطئة: العدد أكبر من المتاح');
-                  } else if (now! % 5 != 0) {
-                    _showSnackBar('عدد الأرغفة يجب أن يكون من مضاعفات 5');
-                  } else if (withDayLimit &&
-                      (dataStd != null && dataNumber != null && dataNumbers != null &&
-                        ((dataStd - dataNumber + now!) / DateTime.now().day > dataNumbers * 5))) {
-                    _showSnackBar('تخطيت الحد اليومي');
-                  } else {
-                    // Always update, use bk: now!/5.0
-                    BlocProvider.of<DatacubitCubit>(context).update(
-                      state as Datacubitsuc,
-                      context,
-                      now: now!,
-                      bk: now! / 5.0,
-                      password: isBazn ? passwordController.text : null,
-                    );
-                  }
-                }
+              onfiledsubmited: (value) async {
+                final parsed = int.tryParse(value);
+                if (parsed != null) _onSubmit(nowValue: parsed, data: data);
               },
-              val: (dataVal) {
-                if (dataVal == null || dataVal.isEmpty) {
-                  return 'حقل مطلوب';
-                }
-                final parsed = int.tryParse(dataVal);
-                if (parsed == null) {
-                  return 'يرجى إدخال عدد صحيح';
-                }
-                if (parsed <= 0) {
-                  return 'عدد الأرغفة يجب أن يكون أكبر من الصفر';
-                }
-                if (parsed % 5 != 0) {
-                  return 'عدد الأرغفة يجب أن يكون من مضاعفات 5';
-                }
+              val: (val) {
+                if (val == null || val.isEmpty) return 'حقل مطلوب';
+                final parsed = int.tryParse(val);
+                if (parsed == null) return 'يرجى إدخال عدد صحيح';
+                if (parsed <= 0) return 'عدد الأرغفة يجب أن يكون أكبر من الصفر';
+                if (parsed % 5 != 0) return 'عدد الأرغفة يجب أن يكون من مضاعفات 5';
                 return null;
               },
             ),
@@ -270,51 +202,17 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
             if (withDayLimit)
               custbutton(
                 hint: (int.parse(data['numbers']) * 5).toString(),
-                fun: () {
-                  setState(() {
-                    now = int.parse(data['numbers']) * 5;
-                  });
-                  // If password is required, check it first
-                  if (isBazn) {
-                    if (passwordController.text.isEmpty) {
-                      _showSnackBar('يرجى إدخال كلمة المرور');
-                      return;
-                    }
-                    if (passwordController.text != (cubit.password ?? data['id'].toString())) {
-                      _showSnackBar('كلمة المرور غير صحيحة');
-                      return;
-                    }
-                  }
-                  if (now! > int.parse(data['number'])) {
-                    _showSnackBar('قيمة خاطئة');
-                  } else if ((int.parse(data['std']) - int.parse(data['number']) + now!) / DateTime.now().day > int.parse(data['numbers']) * 5) {
-                    _showSnackBar('تخطيت الحد اليومي');
-                  } else {
-                    // Always update, use bk: now!/5.0
-                    BlocProvider.of<DatacubitCubit>(context).update(
-                      state as Datacubitsuc,
-                      context,
-                      now: now!,
-                      bk: now! / 5.0,
-                      password: isBazn ? passwordController.text : null,
-                    );
-                  }
-                },
-              ),
-            if (!withDayLimit)
-              _buildCustButtonRow([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100], data, state, false),
+                fun: () => _onSubmit(nowValue: int.parse(data['numbers']) * 5, data: data),
+              )
+            else
+              _buildButtonRow([5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100], data),
             custbutton(
               hint: 'السجل',
-              fun: () {
-                Navigator.popAndPushNamed(context, history.name, arguments: data['id']);
-              },
+              fun: () => Navigator.popAndPushNamed(context, history.name, arguments: data['id']),
             ),
             custbutton(
               hint: "اضافة عيش",
-              fun: () {
-                List hh = [data['id'], data['name']];
-                Navigator.popAndPushNamed(context, Addion.name, arguments: hh);
-              },
+              fun: () => Navigator.popAndPushNamed(context, Addion.name, arguments: [data['id'], data['name']]),
             ),
           ],
         ),
@@ -324,105 +222,82 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    String name = ModalRoute.of(context)!.settings.arguments as String;
-    GlobalKey<FormState> GG = GlobalKey();
-    BlocProvider.of<DatacubitCubit>(context).getdata(name);
+    final formKey = GlobalKey<FormState>();
+
     return BlocConsumer<DatacubitCubit, DatacubitState>(
       builder: (context, state) {
         if (state is Datacubitsuc) {
-          final data = state.data['data'][0];
-          // Handle all the different cases with extracted widgets
-          if (data['stutas'] == 'true' && data['per'] == 'باذن' && data['day'] == 'يومي') {
-            return _buildFormSection(GG: GG, data: data, state: state, withDayLimit: true);
-          } else if (data['stutas'] == 'true' && data['per'] == 'بدون اذن' && data['day'] == 'يومي') {
-            return _buildFormSection(GG: GG, data: data, state: state, withDayLimit: true);
-          } else if (data['stutas'] == 'true' && data['per'] == 'باذن') {
-            return _buildFormSection(GG: GG, data: data, state: state, withDayLimit: false);
-          } else if (data['stutas'] == 'true' && data['per'] == 'بدون اذن') {
-            return _buildFormSection(GG: GG, data: data, state: state, withDayLimit: false);
-          } else {
-            return Scaffold(
-              appBar: AppBar(),
-              body: Center(child: Text(' هذا المستخدم محظور بسبب ${data['res']}')),
-            );
+          final data = state.data['data'];
+          if (data == null || data.isEmpty) {
+            Navigator.of(context).pop();
+            return _loading();
           }
-        } else if (state is Datacubitloading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        } else if (state is Datacubitfail) {
-          return Scaffold(
-            appBar: AppBar(),
-            body: const Center(child: Text('هناك خطا في الشبكة')),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(),
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
-      },
-      listener: (BuildContext context, DatacubitState state) {
-        if (state is Datacubitsuc) {
-          BlocProvider.of<DatacubitCubit>(context).hh = [
-            BlocProvider.of<DatacubitCubit>(context).hh = [
-              (BlocProvider.of<DatacubitCubit>(context).state as Datacubitsuc).data['data'][0]['name'],
-              (BlocProvider.of<DatacubitCubit>(context).state as Datacubitsuc).data['data'][0]['id'].toString(),
-            ];
-          ];
-        }
-        if (state is Datacubitsucs) {
-          BlocProvider.of<DatacubitCubit>(context).hh.insert(1, now.toString());
-          BlocProvider.of<DatacubitCubit>(context).hh.insert(2, state.zz);
-          BlocProvider.of<DatacubitCubit>(context)
-              .hh
-              .add(state.data['data'][0]['id']);
 
-          Navigator.popAndPushNamed(context, Printing.name,
-              arguments: BlocProvider.of<DatacubitCubit>(context).hh);
+          final userData = data[0];
+          if (!_isAuthenticated) return _loading();
+
+          return userData['stutas'] == 'true'
+              ? _buildFormSection(
+                  formKey: formKey,
+                  data: userData,
+                  state: state,
+                  withDayLimit: userData['day'] == 'يومي',
+                )
+              : Scaffold(
+                  appBar: AppBar(),
+                  body: Center(child: Text('هذا المستخدم محظور بسبب ${userData['res']}')),
+                );
+        }
+        return _loading();
+      },
+      listener: (context, state) {
+        final cubit = BlocProvider.of<DatacubitCubit>(context);
+        if (state is Datacubitsuc) {
+          final data = state.data['data'];
+          if (data != null && data.isNotEmpty) {
+            cubit.hh = [data[0]['name'], data[0]['id'].toString()];
+          }
+        }
+
+        if (state is Datacubitsucs) {
+          final data = state.data['data'];
+          if (data != null && data.isNotEmpty) {
+            cubit.hh.insert(1, now.toString());
+            cubit.hh.insert(2, state.zz);
+            cubit.hh.add(data[0]['id']);
+            Navigator.of(context).popAndPushNamed(Printing.name, arguments: cubit.hh);
+          }
         }
       },
     );
   }
 
-  DataTable _createDataTable({
-    required BuildContext context,
-    required A,
-    required B,
-    required C,
-    required E,
-    required F,
-    required G,
-    required H,
-    required I,
-  }) {
+  Scaffold _loading() => const Scaffold(body: Center(child: CircularProgressIndicator()));
+
+  DataTable _createDataTable(Map data) {
     return DataTable(
-      columns: _createColumns(),
+      columns: const [
+        DataColumn(label: Text('الكود')),
+        DataColumn(label: Text('صاحب البطاقة')),
+        DataColumn(label: Text('عدد الأرغفة')),
+        DataColumn(label: Text('عدد الأفراد')),
+        DataColumn(label: Text('اخر سحب')),
+        DataColumn(label: Text('تاريخ')),
+        DataColumn(label: Text('الاذن')),
+        DataColumn(label: Text('الاشتراك')),
+      ],
       rows: [
         DataRow(cells: [
-          DataCell(Text(A.toString())),
-          DataCell(Text(B)),
-          DataCell(Text(C.toString())),
-          DataCell(Text(E.toString())),
-          DataCell(Text(F.toString())),
-          DataCell(Text(G.toString())),
-          DataCell(Text(H.toString())),
-          DataCell(Text(I.toString())),
+          DataCell(Text(data['id'].toString())),
+          DataCell(Text(data['name'])),
+          DataCell(Text(data['number'].toString())),
+          DataCell(Text(data['numbers'].toString())),
+          DataCell(Text(data['last'].toString())),
+          DataCell(Text(data['date'].toString())),
+          DataCell(Text(data['per'].toString())),
+          DataCell(Text(data['bk'].toString())),
         ]),
       ],
     );
-  }
-
-  List<DataColumn> _createColumns() {
-    return [
-      const DataColumn(label: Text('الكود')),
-      const DataColumn(label: Text(' صاحب البطاقة')),
-      const DataColumn(label: Text('عدد الأرغفة')),
-      const DataColumn(label: Text('عدد الأفراد')),
-      const DataColumn(label: Text('اخر سحب')),
-      const DataColumn(label: Text('تاريخ ')),
-      const DataColumn(label: Text('الاذن ')),
-      const DataColumn(label: Text('الاشتراك')),
-    ];
   }
 }

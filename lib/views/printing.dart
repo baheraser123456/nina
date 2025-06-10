@@ -4,7 +4,8 @@ import 'package:fina/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -26,6 +27,29 @@ class _PrintingState extends State<Printing> {
   String? D;
   String? E;
   var focusNode = FocusNode();
+  String _title = 'خبز';
+  String _breadType = 'خبز';
+  String _bakeryName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _title = prefs.getString('regular_title') ?? 'خبز';
+      _breadType = prefs.getString('bread_type') ?? 'خبز';
+      _bakeryName =  forn_name;
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +74,7 @@ class _PrintingState extends State<Printing> {
                     zm.Printing.layoutPdf(
                         onLayout: (format) =>
                             _generatePdf(format, A!, C!, B!, D!, E!)).then((_) {
-                      Navigator.pop(context); // Exit after printing
+                      Navigator.pop(context);
                     });
                   }
                 },
@@ -68,10 +92,10 @@ class _PrintingState extends State<Printing> {
           ),
         ),
         body: PdfPreview(
-          canChangeOrientation: false, // Disable changing orientation
-          canChangePageFormat: false, // Disable changing page format
-          canDebug: false, // Hide debug button
-          allowPrinting: false, // Disable sharing and printing options
+          canChangeOrientation: false,
+          canChangePageFormat: false,
+          canDebug: false,
+          allowPrinting: false,
           allowSharing: false,
           build: (format) => _generatePdf(format, A!, C!, B!, D!, E!),
         ),
@@ -81,7 +105,7 @@ class _PrintingState extends State<Printing> {
             zm.Printing.layoutPdf(
               onLayout: (format) => _generatePdf(format, A!, C!, B!, D!, E!),
             ).then((_) {
-              Navigator.pop(context); // Exit after printing
+              Navigator.pop(context);
             });
           },
         ),
@@ -112,12 +136,12 @@ class _PrintingState extends State<Printing> {
                 pw.Column(
                   children: [
                     pw.Text(
-                      E,
+                      _title,
                       style: pw.TextStyle(font: font, fontSize: 25),
                       textDirection: pw.TextDirection.rtl,
                     ),
                     pw.Text(
-                      forn_name,
+                      _bakeryName,
                       style: pw.TextStyle(font: font, fontSize: 25),
                       textDirection: pw.TextDirection.rtl,
                     ),
@@ -136,7 +160,7 @@ class _PrintingState extends State<Printing> {
                     pw.Row(
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
-                          pw.Text('$B رغيف',
+                          pw.Text('$B $_breadType',
                               style: pw.TextStyle(font: font, fontSize: 20),
                               textDirection: pw.TextDirection.rtl),
                           pw.Text(
@@ -148,7 +172,7 @@ class _PrintingState extends State<Printing> {
                     pw.Row(
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
-                          pw.Text('$D رغيف',
+                          pw.Text('$D $_breadType',
                               style: pw.TextStyle(font: font, fontSize: 10),
                               textDirection: pw.TextDirection.rtl),
                           pw.Text(' المتبقي: ',

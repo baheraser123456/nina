@@ -39,7 +39,7 @@ class _HomeState extends State<Home> {
           } else if (state is Loginsuc) {
             load = false;
             setState(() {});
-            Navigator.pushNamed(context, splash.name);
+            Navigator.pushNamed(context, SplashScreen.name);
             BlocProvider.of<GetCubit>(context).gets();
           }
         },

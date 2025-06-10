@@ -36,5 +36,5 @@ const String frks = '$base/getfrk.php';
 const String upfrk = '$base/upfrk.php';
 const String delcards = '$base/deletecards.php';
 const String editcards = '$base/editcard.php';
-const String forn_name = "مخبز الجبالي";
+String forn_name = "مخبز السيد طه";
 const String update_password = '$base/update_password.php';

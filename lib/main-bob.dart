@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         home: const Home(),
         routes: {
-          splash.name: (context) => const splash(),
+          SplashScreen.name: (context) => const SplashScreen(),
           searchedit.name: (context) => const searchedit(),
           add.name: (context) => const add(),
           hhh.name: (context) => const hhh(),

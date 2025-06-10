@@ -7,169 +7,339 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Edit extends StatefulWidget {
-  const Edit({super.key});
   static const name = 'Edit';
+  
+  const Edit({super.key});
 
   @override
   State<Edit> createState() => _EditState();
 }
 
 class _EditState extends State<Edit> {
-  String? hhh;
-  String? id;
-  String? newname;
-  GlobalKey<FormState> GG = GlobalKey();
+  late final TextEditingController _nameController;
+  late final TextEditingController _numbersController;
+  late final TextEditingController _idController;
+  late final TextEditingController _passController;
+  final _formKey = GlobalKey<FormState>();
+  String _permissionValue = 'باذن';
+  String _dayTypeValue = 'يومي';
+  String? _userId;
+  Map<String, dynamic>? _userData;
+  bool _isVerified = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeControllers();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fetchInitialData());
+  }
+
+  void _initializeControllers() {
+    _nameController = TextEditingController();
+    _numbersController = TextEditingController();
+    _idController = TextEditingController();
+    _passController = TextEditingController();
+  }
+
+  void _fetchInitialData() {
+    final routeArgs = ModalRoute.of(context)?.settings.arguments;
+    if (routeArgs is String) {
+      _userId = routeArgs;
+      context.read<DatacubitCubit>().getdata(_userId!);
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _numbersController.dispose();
+    _idController.dispose();
+    _passController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    String kk = ModalRoute.of(context)!.settings.arguments as String;
-
-    BlocProvider.of<DatacubitCubit>(context).getdata(kk);
-
-    return BlocBuilder<DatacubitCubit, DatacubitState>(
+    return BlocConsumer<DatacubitCubit, DatacubitState>(
+      listener: (context, state) {
+        if (state is Datacubitsuc) {
+          _userData = state.data['data'][0];
+          if (!_isVerified && _userData?['per'] == 'باذن') {
+            _verifyPasswordBeforeShow();
+          } else {
+            _populateFormData(_userData!);
+          }
+        }
+      },
       builder: (context, state) {
         if (state is Datacubitsuc) {
-          return Scaffold(
-              appBar: AppBar(
-                title: const Text('البيانات'),
-              ),
-              body: Form(
-                  key: GG,
-                  child: ListView(children: [
-                    _createDataTable(
-                        context: context,
-                        B: state.data['data'][0]['name'].toString(),
-                        A: state.data['data'][0]['id'],
-                        C: state.data['data'][0]['numbers']),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    custfiled(
-                      hh: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp('[ا-ي ,ئ,ء,ؤ,أ]'))
-                      ],
-                      hint: 'الاسم',
-                      onsaved: (data) {
-                        newname = data;
-                      },
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                              hintText: 'عدد الأفراد',
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black))),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          validator: (value) {
-                            if (value == '0' ||
-                                value == state.data['data'][0]['numbers']) {
-                              return 'قيمة خاطئة';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            hhh = value;
-                          },
-                        )),
-                    Center(
-                      child: SizedBox(
-                        width: 300,
-                        child: BlocListener<EditcubitCubit, EditcubitState>(
-                          listener:
-                              (BuildContext context, EditcubitState state) {
-                            if (state is Editcubitfail) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text('هناك خطأ ما حاول مرة أخري')));
-                            } else if (state is Editcubitsuc &&
-                                GG.currentState!.validate()) {
-                              Navigator.pop(context);
-                              BlocProvider.of<GetCubit>(context).gets();
-                            }
-                          },
-                          child: GestureDetector(
-                            onTap: () {
-                              BlocProvider.of<EditcubitCubit>(context).edit(
-                                  ip: state.data['data'][0]['id'].toString(),
-                                  names:
-                                      newname ?? state.data['data'][0]['name'],
-                                  name: state.data['data'][0]['name'],
-                                  number: (int.parse(
-                                              state.data['data'][0]['number']) +
-                                          (150 *
-                                              (int.parse(hhh ??
-                                                      state.data['data'][0]
-                                                          ['numbers']) -
-                                                  int.parse(state.data['data']
-                                                      [0]['numbers']))))
-                                      .toString(),
-                                  numbers:
-                                      hhh ?? state.data['data'][0]['numbers']);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Container(
-                                  width: 100,
-                                  color: Colors.blue,
-                                  child: const Center(child: Text('تعديل')),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                  ])));
-        } else if (state is Datacubitloading) {
-          return const Scaffold(
-            body: Center(
-                child: Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )),
-          );
-        } else {
-          return Scaffold(
-            appBar: AppBar(),
-            body: const Center(child: Text('هناك خطا في الشبكة')),
-          );
+          if (_userData?['per'] == 'باذن' && !_isVerified) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+          return _buildEditForm();
         }
+        if (state is Datacubitloading) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        return Scaffold(
+          appBar: AppBar(),
+          body: const Center(child: Text('هناك خطا في الشبكة')),
+        );
       },
     );
   }
 
-  DataTable _createDataTable(
-      {required BuildContext context, required A, required B, required C}) {
-    return DataTable(
-        columns: _createColumns(),
-        rows: _createRows(context: context, A: A, B: B, C: C));
+  Future<void> _verifyPasswordBeforeShow() async {
+    if (_userData == null) return;
+    
+    final passwordController = TextEditingController();
+    final enteredPassword = await showDialog<String?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Text('تأكيد كلمة المرور'),
+        content: TextField(
+          controller: passwordController,
+          autofocus: true,
+          keyboardType: TextInputType.number,
+          maxLength: 4,
+          decoration: const InputDecoration(
+            hintText: 'أدخل كلمة المرور',
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('إلغاء'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: const Text('تأكيد'),
+            onPressed: () {
+              if (passwordController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('كلمة المرور مطلوبة')),
+                );
+                return;
+              }
+              Navigator.of(context).pop(passwordController.text);
+            },
+          ),
+        ],
+      ),
+    );
+    
+    if (enteredPassword == null) {
+      Navigator.pop(context);
+      return;
+    }
+    
+    if (enteredPassword != (_userData?['pass']?.toString() ?? _userData?['id']?.toString() ?? '')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('كلمة المرور غير صحيحة')),
+      );
+      Navigator.pop(context);
+      return;
+    }
+
+    setState(() {
+      _isVerified = true;
+      _populateFormData(_userData!);
+    });
   }
 
-  List<DataColumn> _createColumns() {
-    return [
-      const DataColumn(label: Text('الكود')),
-      const DataColumn(label: Text(' صاحب البطاقة')),
-      const DataColumn(label: Text('عدد الأفراد'))
-    ];
+  void _populateFormData(Map<String, dynamic> data) {
+    if (!mounted) return;
+    setState(() {
+      _nameController.text = data['name']?.toString() ?? '';
+      _numbersController.text = data['numbers']?.toString() ?? '';
+      _idController.text = data['id']?.toString() ?? '';
+      _passController.text = data['pass']?.toString() ?? '';
+      _permissionValue = data['per']?.toString() ?? 'باذن';
+      _dayTypeValue = data['day']?.toString() ?? 'يومي';
+    });
   }
 
-  List<DataRow> _createRows(
-      {required BuildContext context, required A, required B, required C}) {
-    return [
-      DataRow(cells: [
-        DataCell(Text(A.toString())),
-        DataCell(Text(B)),
-        DataCell(Text(C))
-      ]),
-    ];
+  Widget _buildEditForm() {
+    return Scaffold(
+      appBar: AppBar(title: const Text('تعديل البيانات')),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            _buildIdField(),
+            const SizedBox(height: 20),
+            _buildNameField(),
+            const SizedBox(height: 20),
+            _buildNumberOfPeopleField(),
+            const SizedBox(height: 20),
+            if (_permissionValue == 'باذن') _buildPasswordField(),
+            const SizedBox(height: 20),
+            _buildPermissionDropdown(),
+            const SizedBox(height: 20),
+            _buildDayTypeDropdown(),
+            const SizedBox(height: 40),
+            _buildSubmitButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIdField() => TextFormField(
+    controller: _idController,
+    enabled: false,
+    decoration: const InputDecoration(
+      labelText: 'الكود',
+      border: OutlineInputBorder(),
+    ),
+  );
+
+  Widget _buildNameField() => TextFormField(
+    controller: _nameController,
+    decoration: const InputDecoration(
+      labelText: 'الاسم',
+      border: OutlineInputBorder(),
+    ),
+    validator: (value) => value?.isEmpty ?? true ? 'الاسم مطلوب' : null,
+  );
+
+  Widget _buildNumberOfPeopleField() => TextFormField(
+    controller: _numbersController,
+    keyboardType: TextInputType.number,
+    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+    decoration: const InputDecoration(
+      labelText: 'عدد الأفراد',
+      border: OutlineInputBorder(),
+    ),
+    validator: (value) {
+      if (value?.isEmpty ?? true) return 'عدد الأفراد مطلوب';
+      return null;
+    },
+  );
+
+  Widget _buildPasswordField() => TextFormField(
+    controller: _passController,
+    obscureText: false,
+    maxLength: 4,
+    decoration: const InputDecoration(
+      labelText: 'كلمة المرور',
+      border: OutlineInputBorder(),
+    ),
+    validator: (value) {
+      if (value?.isEmpty ?? true) {
+        return 'كلمة المرور مطلوبة للإذن باذن';
+      }
+      if (value?.length != 4) {
+        return 'كلمة المرور يجب أن تكون 4 أرقام';
+      }
+      if (!RegExp(r'^\d{4}$').hasMatch(value!)) {
+        return 'كلمة المرور يجب أن تكون أرقام فقط';
+      }
+      return null;
+    },
+  );
+
+  Widget _buildPermissionDropdown() => DropdownButtonFormField<String>(
+    value: _permissionValue,
+    decoration: const InputDecoration(
+      labelText: 'نوع الإذن',
+      border: OutlineInputBorder(),
+    ),
+    items: const [
+      DropdownMenuItem(value: 'باذن', child: Text('باذن')),
+      DropdownMenuItem(value: 'بدون اذن', child: Text('بدون اذن')),
+    ],
+    onChanged: (val) {
+      if (val != null) {
+        setState(() {
+          _permissionValue = val;
+          // Clear password when changing to non-bاذن
+          if (val != 'باذن') {
+            _passController.clear();
+          }
+        });
+      }
+    },
+  );
+
+  Widget _buildDayTypeDropdown() => DropdownButtonFormField<String>(
+    value: _dayTypeValue,
+    decoration: const InputDecoration(
+      labelText: 'نوع الصرف',
+      border: OutlineInputBorder(),
+    ),
+    items: const [
+      DropdownMenuItem(value: 'يومي', child: Text('يومي')),
+      DropdownMenuItem(value: 'غير', child: Text('غير')),
+    ],
+    onChanged: (val) => val != null 
+        ? setState(() => _dayTypeValue = val)
+        : null,
+  );
+
+  Widget _buildSubmitButton() => BlocListener<EditcubitCubit, EditcubitState>(
+    listener: (context, state) {
+      if (state is Editcubitfail) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(state.err)),
+        );
+      } else if (state is Editcubitsuc) {
+        // Just pop back without refreshing
+        Navigator.pop(context);
+      }
+    },
+    child: SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: _userData != null ? () => _handleFormSubmission(context) : null,
+        child: const Text('تعديل'),
+      ),
+    ),
+  );
+
+  Future<void> _handleFormSubmission(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) return;
+    if (_userData == null) return;
+
+    // Check if anything has changed
+    final bool hasNameChanged = _nameController.text != _userData!['name']?.toString();
+    final bool hasNumbersChanged = _numbersController.text != _userData!['numbers']?.toString();
+    final bool hasPermissionChanged = _permissionValue != _userData!['per']?.toString();
+    final bool hasDayTypeChanged = _dayTypeValue != _userData!['day']?.toString();
+    
+    // Check if current password is '0000' to allow arbitrary changes
+    final bool isDefaultPassword = _userData!['pass']?.toString() == '0000';
+    final bool hasPasswordChanged = _permissionValue == 'باذن' && 
+        _passController.text.isNotEmpty && 
+        (isDefaultPassword || _passController.text != _userData!['pass']?.toString());
+
+    // If nothing has changed, show message and return
+    if (!hasNameChanged && !hasNumbersChanged && !hasPermissionChanged && 
+        !hasDayTypeChanged && !hasPasswordChanged) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('لم يتم إجراء أي تغييرات')),
+      );
+      return;
+    }
+
+    // Calculate the new number
+    final baseNumber = int.parse(_userData!['number']);
+    final numbersDiff = int.parse(_numbersController.text) - int.parse(_userData!['numbers']);
+    final newNumber = (baseNumber + (150 * numbersDiff)).toString();
+
+    // Submit the edit
+    context.read<EditcubitCubit>().edit(
+      ip: _userData!['id'].toString(),
+      names: _nameController.text,
+      name: _userData!['name'],
+      number: newNumber,
+      numbers: _numbersController.text,
+      pass: hasPasswordChanged ? _passController.text : _userData!['pass'] ?? _userData!['id'] ?? '',
+      per: _permissionValue,
+      day: _dayTypeValue,
+    );
   }
 }

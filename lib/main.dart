@@ -42,6 +42,7 @@ import 'package:fina/views/posprinting.dart';
 import 'package:fina/views/printing.dart';
 import 'package:fina/views/refactory.dart';
 import 'package:fina/views/total.dart';
+import 'package:fina/views/settings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         home: const Home(),
         routes: {
-          splash.name: (context) => const splash(),
+          SplashScreen.name: (context) => const SplashScreen(),
           searchedit.name: (context) => const searchedit(),
           add.name: (context) => const add(),
           hhh.name: (context) => const hhh(),
@@ -136,6 +137,7 @@ class MyApp extends StatelessWidget {
           Month2024.name: (context) => const Month2024(),
           cardspages.name: (context) => const cardspages(),
           ChMonth2024.name: (context) => const ChMonth2024(),
+          SettingsPage.name: (context) => const SettingsPage(),
         },
       ),
     );
