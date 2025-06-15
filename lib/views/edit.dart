@@ -26,6 +26,26 @@ class _EditState extends State<Edit> {
   String? _userId;
   Map<String, dynamic>? _userData;
   bool _isVerified = false;
+  bool _isLoading = false;
+
+  void _showSnackBar(String message, {bool isError = false}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.red : Colors.green,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(8),
+        duration: Duration(seconds: isError ? 3 : 2),
+        action: isError ? SnackBarAction(
+          label: 'حسناً',
+          textColor: Colors.white,
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ) : null,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -69,6 +89,8 @@ class _EditState extends State<Edit> {
           } else {
             _populateFormData(_userData!);
           }
+        } else if (state is Datacubitfail) {
+          _showSnackBar(state.err, isError: true);
         }
       },
       builder: (context, state) {
@@ -118,9 +140,7 @@ class _EditState extends State<Edit> {
             child: const Text('تأكيد'),
             onPressed: () {
               if (passwordController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('كلمة المرور مطلوبة')),
-                );
+                _showSnackBar('كلمة المرور مطلوبة', isError: true);
                 return;
               }
               Navigator.of(context).pop(passwordController.text);
@@ -136,9 +156,7 @@ class _EditState extends State<Edit> {
     }
     
     if (enteredPassword != (_userData?['pass']?.toString() ?? _userData?['id']?.toString() ?? '')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('كلمة المرور غير صحيحة')),
-      );
+      _showSnackBar('كلمة المرور غير صحيحة', isError: true);
       Navigator.pop(context);
       return;
     }
@@ -280,25 +298,41 @@ class _EditState extends State<Edit> {
         : null,
   );
 
-  Widget _buildSubmitButton() => BlocListener<EditcubitCubit, EditcubitState>(
-    listener: (context, state) {
-      if (state is Editcubitfail) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(state.err)),
+  Widget _buildSubmitButton() {
+    return BlocConsumer<EditcubitCubit, EditcubitState>(
+      listener: (context, state) {
+        if (state is Editcubitfail) {
+          setState(() => _isLoading = false);
+          _showSnackBar(state.err, isError: true);
+        } else if (state is Editcubitsuc) {
+          setState(() => _isLoading = false);
+          _showSnackBar('تم التحديث بنجاح');
+          Navigator.pop(context);
+          context.read<GetCubit>().gets();
+        } else if (state is Editcubitload) {
+          setState(() => _isLoading = true);
+        }
+      },
+      builder: (context, state) {
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: _isLoading ? null : () => _handleFormSubmission(context),
+            child: _isLoading 
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : const Text('تعديل'),
+          ),
         );
-      } else if (state is Editcubitsuc) {
-        // Just pop back without refreshing
-        Navigator.pop(context);
-      }
-    },
-    child: SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _userData != null ? () => _handleFormSubmission(context) : null,
-        child: const Text('تعديل'),
-      ),
-    ),
-  );
+      },
+    );
+  }
 
   Future<void> _handleFormSubmission(BuildContext context) async {
     if (!_formKey.currentState!.validate()) return;
@@ -319,9 +353,7 @@ class _EditState extends State<Edit> {
     // If nothing has changed, show message and return
     if (!hasNameChanged && !hasNumbersChanged && !hasPermissionChanged && 
         !hasDayTypeChanged && !hasPasswordChanged) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('لم يتم إجراء أي تغييرات')),
-      );
+      _showSnackBar('لم يتم إجراء أي تغييرات');
       return;
     }
 
