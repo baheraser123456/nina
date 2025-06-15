@@ -71,7 +71,7 @@ class _hhhState extends State<cardspage> with SingleTickerProviderStateMixin {
                         onfiledsubmited: (data) {
                           value = data;
                           if (GG.currentState!.validate()) {
-                            BlocProvider.of<DatacubitCubit>(context).updatecard(
+                            BlocProvider.of<DatacubitCubit>(context).updatecardz(
                                 state.data['data'][0]['name'],
                                 state.data['data'][0]['id'].toString(),
                                 mon,

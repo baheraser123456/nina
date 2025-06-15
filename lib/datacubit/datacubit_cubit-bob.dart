@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-part 'datacubit_state.dart';
+part 'datacubit_state-bob.dart';
 
 class DatacubitCubit extends Cubit<DatacubitState> {
   DatacubitCubit() : super(DatacubitInitial());
@@ -101,15 +101,14 @@ class DatacubitCubit extends Cubit<DatacubitState> {
     }
   }
 
-  void updatbk({required String name, required String ip, required now}) async {
+  void updatefrk(String id, String number) async {
     emit(cardsload());
     var res = await post(dfs, {
-      'ip': ip.toString(),
+      'ip': id.toString(),
       'date': DateTime.now().toString(),
-      'name': name,
-      "bk": now.toString(),
+      'number': number,
       'total': DateTime.now().day.toString(),
-      'totals': (now * 20).toString()
+      'totals': (int.tryParse(number) ?? 0 * 20).toString()
     });
 
     if (res == 'wrong') {

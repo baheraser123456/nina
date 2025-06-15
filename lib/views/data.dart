@@ -214,6 +214,13 @@ class _hhhState extends State<hhh> with SingleTickerProviderStateMixin {
               hint: "اضافة عيش",
               fun: () => Navigator.popAndPushNamed(context, Addion.name, arguments: [data['id'], data['name']]),
             ),
+            custbutton(
+              hint: "فرق العيش",
+              fun: () => Navigator.popAndPushNamed(context, 'frk', arguments: {
+                'id': data['id'].toString(),
+                'name': data['name'].toString()
+              }),
+            ),
           ],
         ),
       ),

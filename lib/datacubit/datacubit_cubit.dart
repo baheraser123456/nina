@@ -13,86 +13,151 @@ class DatacubitCubit extends Cubit<DatacubitState> {
   DatacubitCubit() : super(DatacubitInitial());
   bool vv = false;
   List hh = [];
-  getdata(String name) async {
-    emit(Datacubitloading());
 
-    var response = await post(getname, {'name': name});
-    if (response == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
+  void _handleError(dynamic error, String operation) {
+    print('Error in $operation: $error');
+    if (error is NetworkException) {
+      emit(Datacubitfail('خطأ في الاتصال بالشبكة. يرجى التحقق من اتصال الإنترنت'));
+    } else if (error is DataFormatException) {
+      emit(Datacubitfail('خطأ في تنسيق البيانات. يرجى المحاولة مرة أخرى'));
+    } else if (error is ServerException) {
+      emit(Datacubitfail('خطأ في الخادم. يرجى المحاولة لاحقاً'));
     } else {
+      emit(Datacubitfail('حدث خطأ في النظام. يرجى المحاولة مرة أخرى'));
+    }
+  }
+
+  getdata(String name) async {
+    if (name.isEmpty) {
+      emit(Datacubitfail('الرجاء إدخال اسم صحيح'));
+      return;
+    }
+
+    emit(Datacubitloading());
+    try {
+      var response = await post(getname, {'name': name});
+      if (response == null) {
+        emit(Datacubitfail('لم يتم العثور على بيانات'));
+        return;
+      }
       emit(Datacubitsuc(response));
+    } catch (e) {
+      _handleError(e, 'getdata');
     }
   }
 
   getcard(String name) async {
-    emit(Datacubitloading());
+    if (name.isEmpty) {
+      emit(Datacubitfail('الرجاء إدخال اسم صحيح'));
+      return;
+    }
 
-    var response = await post(getnamecards, {'name': name});
-    if (response == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    } else {
+    emit(Datacubitloading());
+    try {
+      var response = await post(getnamecards, {'name': name});
+      if (response == null) {
+        emit(Datacubitfail('لم يتم العثور على بيانات'));
+        return;
+      }
       emit(Datacubitsuc(response));
+    } catch (e) {
+      _handleError(e, 'getcard');
     }
   }
+
   getcards(String name) async {
-    emit(Datacubitloading());
+    if (name.isEmpty) {
+      emit(Datacubitfail('الرجاء إدخال اسم صحيح'));
+      return;
+    }
 
-    var response = await post(getnamecardss, {'name': name});
-    if (response == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    } else {
+    emit(Datacubitloading());
+    try {
+      var response = await post(getnamecardss, {'name': name});
+      if (response == null) {
+        emit(Datacubitfail('لم يتم العثور على بيانات'));
+        return;
+      }
       emit(Datacubitsuc(response));
+    } catch (e) {
+      _handleError(e, 'getcards');
     }
   }
-  getdatas(String id) async {
-    emit(Datacubitloading());
 
-    var response = await post(frkurl, {'id': id});
-    if (response == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    } else {
-      print(response);
+  getdatas(String id) async {
+    if (id.isEmpty) {
+      emit(Datacubitfail('معرف المستخدم غير صالح'));
+      return;
+    }
+
+    emit(Datacubitloading());
+    try {
+      var response = await post(frkurl, {'id': id});
+      
+      if (response == null) {
+        emit(Datacubitfail('لم يتم العثور على بيانات'));
+        return;
+      }
+
+      if (response['data'] == null || response['data'].isEmpty) {
+        emit(Datacubitfail('لا يوجد فرق عيش'));
+        return;
+      }
+
       emit(Datacubitsuc(response));
+    } catch (e) {
+      _handleError(e, 'getdatas');
     }
   }
 
   void update(Datacubitsuc state, BuildContext context,
       {required int now, required double bk, String? password}) async {
+    if (state.data['data'] == null || state.data['data'].isEmpty) {
+      emit(Datacubitfail('لا توجد بيانات للتحديث'));
+      return;
+    }
+
     emit(Datacubitloading());
-    if (now < int.parse(state.data['data'][0]['number']) ||
-        now == int.parse(state.data['data'][0]['number'])) {
-      int zz = int.parse(state.data['data'][0]['number']) - now;
+    try {
+      if (now < int.parse(state.data['data'][0]['number']) ||
+          now == int.parse(state.data['data'][0]['number'])) {
+        int zz = int.parse(state.data['data'][0]['number']) - now;
 
-      initializeDateFormatting("ar_SA", null);
-      var nows = DateTime.now();
-      var formatter = DateFormat.MMMd('ar_SA');
+        initializeDateFormatting("ar_SA", null);
+        var nows = DateTime.now();
+        var formatter = DateFormat.MMMd('ar_SA');
+        String formatted = formatter.format(nows);
+        
+        var nowss = DateTime.now();
+        var formatters = DateFormat.Hm('ar_SA');
+        String formatteds = formatters.format(nowss);
 
-      String formatted = formatter.format(nows);
-      initializeDateFormatting("ar_SA", null);
-      var nowss = DateTime.now();
-      var formatters = DateFormat.Hm('ar_SA');
+        var req = {
+          'ip': state.data['data'][0]['id'].toString(),
+          'name': state.data['data'][0]['name'],
+          'number': zz.toString(),
+          'last': now.toString(),
+          'date': formatted + formatteds,
+          'total': DateTime.now().day.toString(),
+          'totals': now.toString(),
+          'pro': now.toString(),
+          'bk': bk.toString()
+        };
+        if (password != null) {
+          req['password'] = password;
+        }
 
-      String formatteds = formatters.format(nowss);
-      var req = {
-        'ip': state.data['data'][0]['id'].toString(),
-        'name': state.data['data'][0]['name'],
-        'number': zz.toString(),
-        'last': now.toString(),
-        'date': formatted + formatteds,
-        'total': DateTime.now().day.toString(),
-        'totals': now.toString(),
-        'pro': now.toString(),
-        'bk': bk.toString()
-      };
-      if (password != null) {
-        req['password'] = password;
-      }
-      var res = await post(updatenum, req);
-      if (res == 'wrong') {
-        emit(Datacubitfail('خطأ في الشبكة'));
-      } else {
+        var res = await post(updatenum, req);
+        if (res == null) {
+          emit(Datacubitfail('فشل التحديث'));
+          return;
+        }
         emit(Datacubitsucs(zz, res));
+      } else {
+        emit(Datacubitfail('القيمة المدخلة غير صالحة'));
       }
+    } catch (e) {
+      _handleError(e, 'update');
     }
   }
 
@@ -100,118 +165,142 @@ class DatacubitCubit extends Cubit<DatacubitState> {
     emit(Datacubitloading());
     try {
       var response = await getnames(getlastout);
-
-      emit(Datacubitsuc(response));
-      if (response == 'wrong') {
-        emit(Datacubitfail('خطأ في الشبكة'));
+      if (response == null) {
+        emit(Datacubitfail('لم يتم العثور على بيانات'));
+        return;
       }
-    } on Exception {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    }
-  }
-
-  void updatecard(String name, String ip, mon, now) async {
-    emit(cardsload());
-    var res = await post(updatecards, {
-      'ip': ip,
-      'date': DateTime.now().toString(),
-      'name': name,
-      'mon': mon.toString(),
-      'now': now.toString(),
-      'total': DateTime.now().day.toString()
-    });
-
-    if (res == 'wrong') {
-      emit(cardsfail());
-    } else {
-      emit(cardssuc());
-    }
-  }
-  void updatecardz(String name, String ip, mon, now) async {
-    emit(cardsload());
-    var res = await post(updatecardss, {
-      'ip': ip,
-      'date': DateTime.now().toString(),
-      'name': name,
-      'mon': mon.toString(),
-      'now': now.toString(),
-      'total': DateTime.now().day.toString()
-    });
-
-    if (res == 'wrong') {
-      emit(cardsfail());
-    } else {
-      emit(cardssuc());
-    }
-  }
-
-  void updatbk({required String name, required String ip, required now}) async {
-    emit(cardsload());
-    var res = await post(dfs, {
-      'ip': ip.toString(),
-      'date': DateTime.now().toString(),
-      'name': name,
-      "bk": now.toString(),
-      'total': DateTime.now().day.toString(),
-      'totals': (now * 20).toString()
-    });
-
-    if (res == 'wrong') {
-      emit(cardsfail());
-    } else {
-      emit(cardssuc());
+      emit(Datacubitsuc(response));
+    } catch (e) {
+      _handleError(e, 'getlast');
     }
   }
 
   gethis(ip) async {
-    emit(Datacubitloading());
+    if (ip == null || ip.toString().isEmpty) {
+      emit(Datacubitfail('معرف المستخدم غير صالح'));
+      return;
+    }
 
-    var response = await post(his, {'ip': ip.toString()});
-    if (response == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    } else {
+    emit(Datacubitloading());
+    try {
+      var response = await post(his, {'ip': ip.toString()});
+      if (response == null) {
+        emit(Datacubitfail('لم يتم العثور على بيانات'));
+        return;
+      }
       emit(Datacubitsuc(response));
+    } catch (e) {
+      _handleError(e, 'gethis');
     }
   }
 
   updatefrk(id, number) async {
-    emit(frkload());
-    var response = await post(upfrk, {
-      'id': id,
-      'date': DateTime.now().toString(),
-      'number': number,
-    });
-    if (response == 'wrong') {
+    if (id == null || id.toString().isEmpty) {
       emit(frkfail());
-    } else {
+      return;
+    }
+
+    final numberValue = int.tryParse(number.toString());
+    if (numberValue == null || numberValue <= 0) {
+      emit(frkfail());
+      return;
+    }
+
+    emit(frkload());
+    try {
+      var response = await post(upfrk, {
+        'id': id,
+        'date': DateTime.now().toString(),
+        'number': number,
+      });
+
+      if (response == null) {
+        emit(frkfail());
+        return;
+      }
+
       emit(frksuc());
+    } catch (e) {
+      print('Error in updatefrk: $e');
+      emit(frkfail());
     }
   }
 
   Future<void> updatePassword({required String id, required String password}) async {
+    if (id.isEmpty) {
+      emit(Datacubitfail('معرف المستخدم غير صالح'));
+      return;
+    }
+
+    if (password.isEmpty) {
+      emit(Datacubitfail('الرجاء إدخال كلمة مرور صحيحة'));
+      return;
+    }
+
     emit(Datacubitloading());
-    var res = await post(update_password, {
-      'id': id,
-      'password': password,
-    });
-    if (res == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    } else {
+    try {
+      var res = await post(update_password, {
+        'id': id,
+        'password': password,
+      });
+      if (res == null) {
+        emit(Datacubitfail('فشل تحديث كلمة المرور'));
+        return;
+      }
       emit(Datacubitsuc(res));
+    } catch (e) {
+      _handleError(e, 'updatePassword');
     }
   }
 
   Future<void> deleteOperation({required String id, required String last, required String password}) async {
+    if (id.isEmpty) {
+      emit(Datacubitfail('معرف المستخدم غير صالح'));
+      return;
+    }
+
+    if (password.isEmpty) {
+      emit(Datacubitfail('الرجاء إدخال كلمة مرور صحيحة'));
+      return;
+    }
+
     emit(Datacubitloading());
-    var res = await post('delete_operation', {
-      'id': id,
-      'last': last,
-      'password': password,
-    });
-    if (res == 'wrong') {
-      emit(Datacubitfail('خطأ في الشبكة'));
-    } else {
+    try {
+      var res = await post('delete_operation', {
+        'id': id,
+        'last': last,
+        'password': password,
+      });
+      if (res == null) {
+        emit(Datacubitfail('فشل حذف العملية'));
+        return;
+      }
       emit(Datacubitsuc(res));
+    } catch (e) {
+      _handleError(e, 'deleteOperation');
+    }
+  }
+
+  void updatecardz(String name, String ip, int mon, String now) async {
+    emit(cardsload());
+    try {
+      var res = await post(updatecards, {
+        'ip': ip,
+        'date': DateTime.now().toString(),
+        'name': name,
+        'mon': mon.toString(),
+        'now': now,
+        'total': DateTime.now().day.toString()
+      });
+
+      if (res == null) {
+        emit(cardsfail());
+        return;
+      }
+      emit(cardssuc());
+    } catch (e) {
+      print('Error in updatecardz: $e');
+      emit(cardsfail());
     }
   }
 }

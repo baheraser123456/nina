@@ -119,7 +119,6 @@ class SplashScreen  extends StatelessWidget {
       _ButtonConfig("اجمالي اشتراكات التوزيع", () => Navigator.pushNamed(context, dfTotal.name)),
       _ButtonConfig("اضافة للتوزيع", () => Navigator.pushNamed(context, Addcard.name)),
       _ButtonConfig("طباعة", () => Navigator.pushNamed(context, ChMonth.name)),
-      _ButtonConfig("فرق العيش", () => _showSearch(context, frkfilter())),
       _ButtonConfig("حذف من التوزيع", () => _showSearch(context, DeleteFilter())),
       _ButtonConfig("تعديل الاشتراك", () => _showSearch(context, mondeli())),
       _ButtonConfig("اشتراكات 2024", () => Navigator.pushNamed(context, Month2024.name)),

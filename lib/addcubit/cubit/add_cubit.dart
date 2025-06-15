@@ -9,6 +9,7 @@ part 'add_state.dart';
 class AddCubit extends Cubit<AddState> {
   AddCubit() : super(Initialadd());
   GlobalKey<FormState> key = GlobalKey();
+
   add({required name, required number}) async {
     try {
       var res = await post(addurl, {
@@ -17,18 +18,20 @@ class AddCubit extends Cubit<AddState> {
         'numbers': number,
       });
       if (res == 'wrong') {
-        emit(Failadd(txt: 'حطأ في الشبكة'));
+        emit(Failadd(txt: 'خطأ في الشبكة'));
       } else {
         emit(Sucadd());
       }
+    } on FormatException catch (e) {
+      print('Data format error: $e');
+      emit(Failadd(txt: 'خطأ في تنسيق البيانات'));
     } on Exception catch (e) {
+      print('Unexpected error: $e');
       emit(Failadd(txt: e.toString()));
     }
   }
 
   addcard({required name, required number, required place}) async {
-
-
     try {
       var res = await post(addcardurl, {
         'name': name,
@@ -37,11 +40,15 @@ class AddCubit extends Cubit<AddState> {
         'value': (int.parse(number)*30).toString(),
       });
       if (res == 'wrong') {
-        emit(Failadd(txt: 'حطأ في الشبكة'));
+        emit(Failadd(txt: 'خطأ في الشبكة'));
       } else {
         emit(Sucadd());
       }
+    } on FormatException catch (e) {
+      print('Data format error: $e');
+      emit(Failadd(txt: 'خطأ في تنسيق البيانات'));
     } on Exception catch (e) {
+      print('Unexpected error: $e');
       emit(Failadd(txt: e.toString()));
     }
   }
@@ -58,7 +65,11 @@ class AddCubit extends Cubit<AddState> {
       } else {
         emit(Sucaddion());
       }
-    } on Exception {
+    } on FormatException catch (e) {
+      print('Data format error: $e');
+      emit(Failaddion());
+    } on Exception catch (e) {
+      print('Unexpected error: $e');
       emit(Failaddion());
     }
   }

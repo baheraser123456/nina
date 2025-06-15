@@ -1,4 +1,4 @@
-part of 'datacubit_cubit.dart';
+part of 'datacubit_cubit-bob.dart';
 
 abstract class DatacubitState {}
 
@@ -32,3 +32,9 @@ class cardssuc extends DatacubitState {}
 class cardsfail extends DatacubitState {}
 
 class cardsload extends DatacubitState {}
+
+class frksuc extends DatacubitState {}
+
+class frkfail extends DatacubitState {}
+
+class frkload extends DatacubitState {}

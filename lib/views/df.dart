@@ -73,10 +73,10 @@ class _hhhState extends State<df> with SingleTickerProviderStateMixin {
                         hh: [FilteringTextInputFormatter.digitsOnly],
                         onfiledsubmited: (data) {
                           now = double.parse(data);
-                          BlocProvider.of<DatacubitCubit>(context).updatbk(
-                              name: state.data['data'][0]['name'],
-                              ip: state.data['data'][0]['id'].toString(),
-                              now: now);
+                          BlocProvider.of<DatacubitCubit>(context).updatefrk(
+                            state.data['data'][0]['id'].toString(),
+                            state.data['data'][0]['number'].toString(),
+                          );
                         },
                       )
                     ])))

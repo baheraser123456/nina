@@ -12,11 +12,17 @@ class TotalCubit extends Cubit<TotalState> {
       emit(Totalload());
       var data = await getnames(total);
 
-      emit(Totalsuc(data: data));
       if (data == 'wrong') {
         emit(Totalfail());
+        return;
       }
-    } on Exception {
+
+      emit(Totalsuc(data: data));
+    } on FormatException catch (e) {
+      print('Data format error: $e');
+      emit(Totalfail());
+    } on Exception catch (e) {
+      print('Unexpected error: $e');
       emit(Totalfail());
     }
   }

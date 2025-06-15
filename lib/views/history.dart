@@ -22,7 +22,8 @@ class history extends StatelessWidget {
                     A: state.data['data'][index]['ip'].toString(),
                     B: state.data['data'][index]['name'].toString(),
                     C: state.data['data'][index]['pro'].toString(),
-                    D: state.data['data'][index]['date'].toString())),
+                    D: state.data['data'][index]['date'].toString(),
+                    E: state.data['data'][index]['operation'].toString())),
                 itemCount: state.data['data'].length,
               ),
             )
@@ -49,16 +50,17 @@ DataTable _createDataTable({
   required B,
   required C,
   required D,
+  required E,
 }) {
   return DataTable(
       columns: _createColumns(),
-      rows: _createRows(context: context, A: A, B: B, C: C, D: D));
+      rows: _createRows(context: context, A: A, B: B, C: C, D: D, E: E));
 }
 
 List<DataColumn> _createColumns() {
   return [
     const DataColumn(label: Text('الكود')),
-    const DataColumn(label: Text(' صاحب البطاقة')),
+    const DataColumn(label: Text('نوع العملية')),
     const DataColumn(label: Text('العملية')),
     const DataColumn(label: Text('تاريخ ')),
   ];
@@ -70,12 +72,31 @@ List<DataRow> _createRows({
   required B,
   required C,
   required D,
+  required E,
 }) {
+  String originalName = B.toString();
+  String originalPro = C.toString();
+
+  String displayedName;
+  String displayedPro;
+
+  if (originalPro == 'فرق العيش' ) {
+    displayedName = originalPro;
+    displayedPro = originalName;
+  } else if (originalName=='اضافة عيش'){
+        displayedName = 'اضافة عيش';
+    displayedPro = originalPro;
+
+  }else{
+    displayedName = 'سحب';
+    displayedPro = originalPro;
+  }
+
   return [
     DataRow(cells: [
       DataCell(Text(A.toString())),
-      DataCell(Text(B)),
-      DataCell(Text(C.toString())),
+      DataCell(Text(displayedName)),
+      DataCell(Text(displayedPro)),
       DataCell(Text(D.toString())),
     ]),
   ];
