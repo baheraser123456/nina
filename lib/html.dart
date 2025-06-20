@@ -35,7 +35,7 @@ post(String url, body) async {
         throw DataFormatException('خطأ في تنسيق البيانات: $e');
       }
     } else {
-      throw ServerException('خطأ في الخادم: ${response.statusCode}');
+      throw ServerException('خطأ في الخادم: ${response.body}');
     }
   } on http.ClientException catch (e) {
     print('Network error: $e');
